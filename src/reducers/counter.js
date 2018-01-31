@@ -1,7 +1,9 @@
-export const INCREMENT_REQUESTED = 'counter/INCREMENT_REQUESTED';
-export const INCREMENT = 'counter/INCREMENT';
-export const DECREMENT_REQUESTED = 'counter/DECREMENT_REQUESTED';
-export const DECREMENT = 'counter/DECREMENT';
+import { createAction, handleActions } from 'redux-actions';
+
+const INCREMENT_REQUESTED = createAction('INCREMENT_REQUESTED');
+const INCREMENT = createAction('INCREMENT');
+const DECREMENT_REQUESTED = createAction('DECREMENT_REQUESTED');
+const DECREMENT = createAction('DECREMENT');
 
 const initialState = {
   count          : 0,
@@ -9,87 +11,67 @@ const initialState = {
   isDecrementing : false,
 };
 
-export default (state = initialState, action) => {
-  switch (action.type) {
-    case INCREMENT_REQUESTED:
-      return {
-        ...state,
-        isIncrementing : true
-      }
-
-    case INCREMENT:
-      return {
-        ...state,
-        count          : state.count + 1,
-        isIncrementing : !state.isIncrementing
-      }
-
-    case DECREMENT_REQUESTED:
-      return {
-        ...state,
-        isDecrementing : true
-      }
-
-    case DECREMENT:
-      return {
-        ...state,
-        count          : state.count - 1,
-        isDecrementing : !state.isDecrementing
-      }
-
-    default:
-      return state
-  }
-}
-
 export const increment = () => {
   return dispatch => {
-    dispatch({
-      type : INCREMENT_REQUESTED
-    })
+    dispatch(INCREMENT_REQUESTED());
 
-    dispatch({
-      type : INCREMENT
-    })
+    dispatch(INCREMENT());
   }
-}
+};
 
 export const incrementAsync = () => {
   return dispatch => {
-    dispatch({
-      type : INCREMENT_REQUESTED
-    })
+    dispatch(INCREMENT_REQUESTED());
 
     return setTimeout(() => {
-      dispatch({
-        type : INCREMENT
-      })
+      dispatch(INCREMENT())
     }, 3000)
   }
-}
+};
 
 export const decrement = () => {
   return dispatch => {
-    dispatch({
-      type : DECREMENT_REQUESTED
-    })
+    dispatch(DECREMENT_REQUESTED());
 
-    dispatch({
-      type : DECREMENT
-    })
+    dispatch(DECREMENT())
   }
-}
+};
 
 export const decrementAsync = () => {
   return dispatch => {
-    dispatch({
-      type : DECREMENT_REQUESTED
-    })
+    dispatch(DECREMENT_REQUESTED());
 
     return setTimeout(() => {
-      dispatch({
-        type : DECREMENT
-      })
+      dispatch(DECREMENT())
     }, 3000)
   }
-}
+};
+
+export default handleActions({
+  INCREMENT_REQUESTED : (state, action) => {
+    return {
+      ...state,
+      isIncrementing : true
+    }
+  },
+  INCREMENT : (state, action) => {
+    return {
+      ...state,
+      count          : state.count + 1,
+      isIncrementing : !state.isIncrementing
+    }
+  },
+  DECREMENT_REQUESTED : (state, action) => {
+    return {
+      ...state,
+      isDecrementing : true
+    }
+  },
+  DECREMENT : (state, action) => {
+    return {
+      ...state,
+      count          : state.count - 1,
+      isDecrementing : !state.isDecrementing
+    }
+  },
+}, initialState)

@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
 import createHistory from 'history/createBrowserHistory';
@@ -26,8 +26,10 @@ const composedEnhancers = compose(
   ...enhancers
 );
 
+const allReducers = combineReducers({ reducers : rootReducer });
+
 const store = createStore(
-  rootReducer,
+  allReducers,
   initialState,
   composedEnhancers,
 );

@@ -1,43 +1,45 @@
-import React from 'react'
-import { push } from 'react-router-redux'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import React from 'react';
+import { push } from 'react-router-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { decrement, decrementAsync, increment, incrementAsync } from '../../reducers/counter';
+
+function mapStateToProps (state) {
+  return state;
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    actions : bindActionCreators({
+      increment,
+      incrementAsync,
+      decrement,
+      decrementAsync,
+      changePage: () => push('/about-us')
+    }, dispatch),
+  };
+}
 
 const Home = props => (
   <div>
     <h1>Home</h1>
     <p>Welcome home!</p>
-    <p>Count: {props.count}</p>
+    <p>Count: {props.reducers.counter.count}</p>
 
     <p>
-      <button onClick={props.increment} disabled={props.isIncrementing}>Increment</button>
-      <button onClick={props.incrementAsync} disabled={props.isIncrementing}>Increment Async</button>
+      <button onClick={props.actions.increment} disabled={props.reducers.counter.isIncrementing}>Increment</button>
+      <button onClick={props.actions.incrementAsync} disabled={props.reducers.counter.isIncrementing}>Increment Async</button>
     </p>
 
     <p>
-      <button onClick={props.decrement} disabled={props.isDecrementing}>Decrementing</button>
-      <button onClick={props.decrementAsync} disabled={props.isDecrementing}>Decrement Async</button>
+      <button onClick={props.actions.decrement} disabled={props.reducers.counter.isDecrementing}>Decrementing</button>
+      <button onClick={props.actions.decrementAsync} disabled={props.reducers.counter.isDecrementing}>Decrement Async</button>
     </p>
 
-    <p><button onClick={() => props.changePage()}>Go to about page via redux</button></p>
-    <button onClick={() => props.changePage()}>Go to about page via redux</button>
+    <p><button onClick={() => props.actions.changePage()}>Go to about page via redux</button></p>
+    <button onClick={() => props.actions.changePage()}>Go to about page via redux</button>
   </div>
 )
-
-const mapStateToProps = state => ({
-  count          : state.counter.count,
-  isIncrementing : state.counter.isIncrementing,
-  isDecrementing : state.counter.isDecrementing
-});
-
-const mapDispatchToProps = dispatch => bindActionCreators({
-  increment,
-  incrementAsync,
-  decrement,
-  decrementAsync,
-  changePage: () => push('/about-us')
-}, dispatch);
 
 export default connect(
   mapStateToProps,
