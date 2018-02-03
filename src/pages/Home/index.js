@@ -15,7 +15,7 @@ function mapDispatchToProps (dispatch) {
       incrementAsync,
       decrement,
       decrementAsync,
-      changePage: () => push('/about-us')
+      changePage: () => push('/menus')
     }, dispatch),
   };
 }
