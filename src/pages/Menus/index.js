@@ -50,6 +50,9 @@ class Menus extends Component {
                   <Card.Header>
                    Crear Menu
                   </Card.Header>
+                  <Card.Meta>
+                    Añadir un menu nuevo
+                  </Card.Meta>
                 </Card.Content>
                 <Card.Content extra>
                   {this.renderCreateButton()}
@@ -57,9 +60,9 @@ class Menus extends Component {
               </Card>
             </Grid.Column>
             {
-              _.times(10, () => {
+              _.times(10, (i) => {
                 return (
-                  <Grid.Column>
+                  <Grid.Column key={i}>
                     <Card
                       image='https://drop.ndtv.com/albums/COOKS/chicken-dinner/chickendinner_640x480.jpg'
                       header='Platos Fuertes'
