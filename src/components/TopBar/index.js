@@ -7,6 +7,7 @@ import { Menu, Input } from 'semantic-ui-react'
 // Pages
 import { decrement, decrementAsync, increment, incrementAsync } from '../../reducers/counter';
 
+import './styles.css';
 
 function mapStateToProps (state) {
   return state;
@@ -27,7 +28,7 @@ function mapDispatchToProps (dispatch) {
 class TopBar extends Component {
   render() {
     return (
-      <Menu inverted className="top-bar">
+      <Menu inverted className="TopBar" fixed={'top'}>
         <Menu.Menu position='right'>
           <Menu.Item>
             <Input icon='search' placeholder='Buscar...'/>

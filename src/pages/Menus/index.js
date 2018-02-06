@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { Button, Card, Grid, Icon } from 'semantic-ui-react';
 import _ from 'lodash';
 
+import './styles.css';
+
 function mapStateToProps (state) {
   return state;
 }
@@ -38,7 +40,7 @@ class Menus extends Component {
 
   render () {
     return (
-      <div className="menus">
+      <div className="Menus">
         <Grid columns={4} doubling>
           <Grid.Row>
             <Grid.Column>

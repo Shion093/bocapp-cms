@@ -10,6 +10,7 @@ import 'semantic-ui-css/semantic.min.css';
 // Pages
 import Home from './pages/Home';
 import Menus from './pages/Menus';
+import Bocas from './pages/Bocas';
 
 // Components
 import SideBar from './components/SideBar';
@@ -36,16 +37,32 @@ function mapDispatchToProps (dispatch) {
 }
 
 class App extends Component {
+  componentWillReceiveProps (newProps) {
+    console.log(newProps);
+    if (newProps.reducers.routing.location.pathname === '/bocas') {
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = 'auto';
+    }
+  }
+
+  componentDidMount () {
+    if (this.props.reducers.routing.location.pathname === '/bocas') {
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = 'auto';
+    }
+  }
   render() {
     return (
       <div className="App">
-        <SideBar>
-          <TopBar />
-          <main>
-            <Route exact path="/" component={Home}/>
-            <Route exact path="/menus" component={Menus}/>
-          </main>
-        </SideBar>
+        <SideBar/>
+        <TopBar />
+        <main className="Main">
+          <Route exact path="/" component={Home}/>
+          <Route exact path="/menus" component={Menus}/>
+          <Route exact path="/bocas" component={Bocas}/>
+        </main>
       </div>
     );
   }

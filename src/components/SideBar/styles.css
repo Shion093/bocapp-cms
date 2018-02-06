@@ -1,0 +1,11 @@
+.SideBar {
+  position: fixed;
+  z-index: 100;
+  width: 150px;
+  height: 100%;
+  top: 47px;
+}
+.SideBar .ui.menu {
+  border-radius: 0;
+  height: 100%;
+}

@@ -6,52 +6,31 @@
 .ui.inverted.menu.top-bar {
   border-radius: 0;
 }
-
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
 }
-
 .App-header {
   background-color: #222;
   height: 150px;
   padding: 20px;
   color: white;
 }
-
 .App-title {
   font-size: 1.5em;
 }
-
 .App-intro {
   font-size: large;
 }
-
-.menus {
+.Main {
+  padding-top: 57px;
   padding-left: 160px;
 }
-
-.add-icon {
-  height: 185px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.add-icon > i.icon {
-  font-size: 60px;
-  height: auto;
-}
-
-.ui.card:first-child {
-  margin-top: 20px !important;
-  margin-bottom: 20px !important;
-}
-
-.ui.card > .image {
-  height: 185px;
-}
-
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

@@ -1,0 +1,28 @@
+.Bocas .add-icon {
+  height: 185px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Bocas .add-icon > i.icon {
+  font-size: 60px;
+  height: auto;
+}
+.Bocas .ui.card:first-child {
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+}
+.Bocas .ui.card > .image {
+  height: 185px;
+}
+.Bocas .selected {
+  overflow-y: scroll;
+  height: 100%;
+}
+.Bocas .available {
+  overflow-y: scroll;
+  height: 100%;
+}
+.Bocas .column-scroll {
+  height: calc(100vh - 47px);
+}
