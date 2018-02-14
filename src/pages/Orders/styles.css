@@ -15,6 +15,10 @@
 .Bocas .ui.card > .image {
   height: 185px;
 }
+.Bocas .selected {
+  overflow-y: scroll;
+  height: 100%;
+}
 .Bocas .available {
   overflow-y: scroll;
   height: 100%;

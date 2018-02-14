@@ -28,7 +28,7 @@ const menus = [
   { key: 'be', value: 'bo', text: 'Bebidas' },
 ];
 
-class Bocas extends Component {
+class Orders extends Component {
 
   renderExtraButton = () => {
     return (
@@ -134,4 +134,4 @@ class Bocas extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Bocas);
+export default connect(mapStateToProps, mapDispatchToProps)(Orders);

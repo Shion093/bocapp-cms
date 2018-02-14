@@ -11,6 +11,7 @@ import 'semantic-ui-css/semantic.min.css';
 import Home from './pages/Home';
 import Menus from './pages/Menus';
 import Bocas from './pages/Bocas';
+import Orders from './pages/Orders';
 
 // Components
 import SideBar from './components/SideBar';
@@ -37,22 +38,22 @@ function mapDispatchToProps (dispatch) {
 }
 
 class App extends Component {
-  componentWillReceiveProps (newProps) {
-    console.log(newProps);
-    if (newProps.reducers.routing.location.pathname === '/bocas') {
-      document.body.style.overflowY = 'hidden';
-    } else {
-      document.body.style.overflowY = 'auto';
-    }
-  }
+  // componentWillReceiveProps (newProps) {
+  //   console.log(newProps);
+  //   if (newProps.reducers.routing.location.pathname === '/bocas') {
+  //     document.body.style.overflowY = 'hidden';
+  //   } else {
+  //     document.body.style.overflowY = 'auto';
+  //   }
+  // }
 
-  componentDidMount () {
-    if (this.props.reducers.routing.location.pathname === '/bocas') {
-      document.body.style.overflowY = 'hidden';
-    } else {
-      document.body.style.overflowY = 'auto';
-    }
-  }
+  // componentDidMount () {
+  //   if (this.props.reducers.routing.location.pathname === '/bocas') {
+  //     document.body.style.overflowY = 'hidden';
+  //   } else {
+  //     document.body.style.overflowY = 'auto';
+  //   }
+  // }
   render() {
     return (
       <div className="App">
@@ -62,6 +63,7 @@ class App extends Component {
           <Route exact path="/" component={Home}/>
           <Route exact path="/menus" component={Menus}/>
           <Route exact path="/bocas" component={Bocas}/>
+          <Route exact path="/ordenes" component={Orders}/>
         </main>
       </div>
     );

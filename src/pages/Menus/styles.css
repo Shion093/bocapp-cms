@@ -15,3 +15,11 @@
 .Menus .ui.card > .image {
   height: 185px;
 }
+.Menus .grid-scroll {
+  height: calc(100vh - 47px);
+  overflow-y: scroll;
+}
+.Menus .inner-scroll {
+  overflow-y: scroll;
+  height: 100%;
+}

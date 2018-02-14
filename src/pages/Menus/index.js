@@ -41,8 +41,8 @@ class Menus extends Component {
   render () {
     return (
       <div className="Menus">
-        <Grid columns={4} doubling>
-          <Grid.Row>
+        <Grid columns={4} doubling className='grid-scroll'>
+          <Grid.Row className='inner-scroll'>
             <Grid.Column>
               <Card>
                 <div className="add-icon">
@@ -62,7 +62,7 @@ class Menus extends Component {
               </Card>
             </Grid.Column>
             {
-              _.times(10, (i) => {
+              _.times(30, (i) => {
                 return (
                   <Grid.Column key={i}>
                     <Card

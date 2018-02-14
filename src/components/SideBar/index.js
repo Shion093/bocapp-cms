@@ -35,6 +35,10 @@ class SideBar extends Component {
             <Icon name='coffee'/>
             Bocas
           </Menu.Item>
+          <Menu.Item name='ordenes' onClick={ this.goToPage('/ordenes') }>
+            <Icon name='cart'/>
+            Ordenes
+          </Menu.Item>
         </Menu>
       </div>
     );
