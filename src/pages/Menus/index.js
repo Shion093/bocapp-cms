@@ -7,6 +7,12 @@ import _ from 'lodash';
 
 import './styles.css';
 
+// Reducers
+import { handleModal } from '../../reducers/modals';
+
+// Components
+import MenuModal from '../../components/MenuModal';
+
 function mapStateToProps (state) {
   return state;
 }
@@ -14,6 +20,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     actions : bindActionCreators({
+      handleModal,
       changePage: () => push('/')
     }, dispatch),
   };
@@ -33,14 +40,19 @@ class Menus extends Component {
   renderCreateButton = () => {
     return (
       <div className='ui two buttons'>
-        <Button basic color='green'>Crear</Button>
+        <Button basic color='green' onClick={this.openCreateModal}>Crear</Button>
       </div>
     )
+  };
+
+  openCreateModal = () => {
+    this.props.actions.handleModal('createMenuModal')
   };
 
   render () {
     return (
       <div className="Menus">
+        <MenuModal />
         <Grid columns={4} doubling className='grid-scroll'>
           <Grid.Row className='inner-scroll'>
             <Grid.Column>

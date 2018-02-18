@@ -13,6 +13,7 @@
     "watch-css": "npm run build-css && node-less-chokidar src/ -o src/ --watch --recursive"
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "history": "^4.7.2",
     "lodash": "^4.17.4",
     "react": "^16.2.0",

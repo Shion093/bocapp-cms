@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
-import { Button, Grid, Icon, Item, Image, Label, Menu, Input, Dropdown, Segment } from 'semantic-ui-react';
+import { Button, Grid, Icon, Item, Image, Label, Dropdown } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import './styles.css';
