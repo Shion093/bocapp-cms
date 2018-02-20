@@ -9,6 +9,7 @@ import './styles.css';
 
 // Reducers
 import { handleModal } from '../../reducers/modals';
+import { getAllMenus } from '../../reducers/menus';
 
 // Components
 import MenuModal from '../../components/MenuModal';
@@ -20,6 +21,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     actions : bindActionCreators({
+      getAllMenus,
       handleModal,
       changePage: () => push('/')
     }, dispatch),
@@ -27,6 +29,10 @@ function mapDispatchToProps (dispatch) {
 }
 
 class Menus extends Component {
+
+  componentWillMount () {
+    this.props.actions.getAllMenus();
+  }
 
   renderExtraButton = () => {
     return (
@@ -50,6 +56,8 @@ class Menus extends Component {
   };
 
   render () {
+    const { menus } = this.props.reducers.menus;
+    console.log('hola');
     return (
       <div className="Menus">
         <MenuModal />
@@ -74,15 +82,16 @@ class Menus extends Component {
               </Card>
             </Grid.Column>
             {
-              _.times(30, (i) => {
+              _.map(menus, (menu) => {
+                const { _id, picture, name, description } = menu;
                 return (
-                  <Grid.Column key={i}>
-                    <Card
-                      image='https://drop.ndtv.com/albums/COOKS/chicken-dinner/chickendinner_640x480.jpg'
-                      header='Platos Fuertes'
-                      meta='Menu para platos fuertes'
-                      extra={ this.renderExtraButton() }
-                    />
+                  <Grid.Column key={_id}>
+                    <Card { ...{
+                      image  : picture,
+                      header : name,
+                      meta   : description,
+                      extra  : this.renderExtraButton(),
+                    } } />
                   </Grid.Column>
                 )
               })

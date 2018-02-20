@@ -3,25 +3,53 @@ import { createAction, handleActions } from 'redux-actions';
 
 import axios from '../helpers/axios';
 
+import { HANDLE_MODAL } from './modals';
+
 export const MENU_CREATED = createAction('MENU_CREATED');
+export const MENU_GET_ALL = createAction('MENU_GET_ALL');
 export const HANDLE_MENU_INPUT = createAction('HANDLE_MENU_INPUT');
+export const HANDLE_MENU_LOADER = createAction('HANDLE_MENU_LOADER');
 
 export const initialState = I.from({
   create : {
     name        : '',
     description : '',
-    picture     : 'https://img.buzzfeed.com/buzzfeed-static/static/2016-03/22/15/enhanced/webdr03/enhanced-2202-1458675262-19.png',
+    picture     : '',
   },
-  menus : [],
+  menus  : [],
+  loader : false,
 });
 
-export function createMenu () {
+export function createMenu (blob) {
   return async (dispatch, getState) => {
-    const { reducers : { menus : { create, menus } } } = getState();
-    const { data } = await axios.post('menus/create', create);
-    console.log(data);
-    const addNewMenu = menus.concat(data);
-    dispatch(MENU_CREATED(addNewMenu));
+    try {
+      const { reducers : { menus : { create, menus } } } = getState();
+      const form = new FormData();
+      const { description, name } = create;
+      form.append('description', description);
+      form.append('name', name);
+      form.append('picture', blob);
+      const { data } = await axios.post('menus/create', form);
+      const addNewMenu = I.asMutable(menus);
+      addNewMenu.unshift(data);
+      dispatch(HANDLE_MODAL('createMenuModal'));
+      dispatch(HANDLE_MENU_LOADER());
+      dispatch(MENU_CREATED(addNewMenu));
+    } catch (e) {
+      console.log(e);
+    }
+
+  }
+}
+
+export function getAllMenus () {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get('menus');
+      dispatch(MENU_GET_ALL(data));
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
@@ -31,11 +59,23 @@ export function handleMenuInputs (name, value) {
   }
 }
 
+export function handleMenuLoader () {
+  return (dispatch) => {
+    dispatch(HANDLE_MENU_LOADER())
+  }
+}
+
 export default handleActions({
   MENU_CREATED : (state, action) => {
+    return I.merge(state, { menus : action.payload, create : initialState.create });
+  },
+  MENU_GET_ALL : (state, action) => {
     return I.merge(state, { menus : action.payload });
   },
   HANDLE_MENU_INPUT : (state, action) => {
     return I.setIn(state, ['create', action.payload.name], action.payload.value);
   },
+  HANDLE_MENU_LOADER : (state) => {
+    return I.set(state, 'loader', !state.loader);
+  }
 }, initialState)

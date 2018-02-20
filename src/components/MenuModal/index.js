@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Modal, Form } from 'semantic-ui-react';
+import { Modal, Form, Input, Button } from 'semantic-ui-react';
+import Cropper from 'react-cropper';
 
 import './styles.css';
+import 'cropperjs/dist/cropper.css';
 
 // Reducers
 import { handleModal } from '../../reducers/modals';
-import { handleMenuInputs, createMenu } from '../../reducers/menus';
+import { handleMenuInputs, createMenu, handleMenuLoader } from '../../reducers/menus';
 
 function mapStateToProps(state) {
   return state;
@@ -17,6 +19,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions : bindActionCreators({
+      handleMenuLoader,
       createMenu,
       handleModal,
       handleMenuInputs,
@@ -28,9 +31,10 @@ function mapDispatchToProps(dispatch) {
 class MenuModal extends Component {
   render() {
     const { createMenuModal } = this.props.reducers.modals;
-    const { create : { name, description } } = this.props.reducers.menus;
+    const { create : { name, description, picture }, loader } = this.props.reducers.menus;
+    console.log(this.state);
     return (
-      <div className="MenuModal">
+      <div className='MenuModal'>
         <Modal
           open={ createMenuModal }
           onClose={ this.closeModal }>
@@ -53,7 +57,35 @@ class MenuModal extends Component {
                 value       : description,
                 onChange    : this.handleChange,
               } }  />
-              <Form.Button content='Crear'/>
+              <Form.Input>
+                <span>
+                  <label htmlFor='fileUploader' className='ui icon button'>
+                    <i className='upload icon' />
+                    Subir Foto
+                  </label>
+                  <input
+                    type='file'
+                    id='fileUploader'
+                    style={ { display : 'none' } }
+                    onChange={ this.handleSelectImage }
+                    ref={ input => this.input = input }
+                  />
+                </span>
+              </Form.Input>
+
+              <div style={{ width : 500, height: 300}}>
+                <Cropper { ...{
+                  ref         : 'cropper',
+                  src         : picture,
+                  style       : { height : 300, width : '100%' },
+                  aspectRatio : 16 / 9,
+                  guides      : false,
+                } } />
+              </div>
+
+              <div style={{ marginTop : 20, width : 200}}>
+                <Form.Button content='Crear' positive fluid loading={loader} />
+              </div>
             </Form>
           </Modal.Content>
         </Modal>
@@ -61,12 +93,30 @@ class MenuModal extends Component {
     );
   }
 
+  loadEditView = (url) => {
+    this.props.actions.handleMenuInputs('picture', url);
+  };
+
+  handleSelectImage = () => {
+    const file = this.input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      this.loadEditView(e.target.result);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
   closeModal = () => {
     this.props.actions.handleModal('createMenuModal');
   };
 
   handleSubmit = () => {
-    this.props.actions.createMenu();
+    this.props.actions.handleMenuLoader();
+    this.refs.cropper.getCroppedCanvas().toBlob((blob) => {
+      this.props.actions.createMenu(blob);
+    });
   };
 
   handleChange = (e, { name, value }) => {
