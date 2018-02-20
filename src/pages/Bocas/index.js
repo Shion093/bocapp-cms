@@ -7,6 +7,9 @@ import _ from 'lodash';
 
 import './styles.css';
 
+// Reducers
+import { getAllMenus } from '../../reducers/menus';
+
 const paragraph = <Image src='/assets/images/wireframe/short-paragraph.png' />
 
 function mapStateToProps (state) {
@@ -16,19 +19,25 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     actions : bindActionCreators({
-      changePage: () => push('/')
+      changePage: () => push('/'),
+      getAllMenus,
     }, dispatch),
   };
 }
 
-const menus = [
-  { key: 'pl', value: 'pl', text: 'Platos' },
-  { key: 'ca', value: 'ca', text: 'Carnes' },
-  { key: 'bo', value: 'bo', text: 'Bocas' },
-  { key: 'be', value: 'bo', text: 'Bebidas' },
-];
-
 class Bocas extends Component {
+
+  componentWillMount () {
+    const { menus } = this.props.reducers.menus;
+    if (_.isEmpty(menus)) {
+      this.props.actions.getAllMenus();
+    }
+  }
+
+  getOptions = () => {
+    const { menus } = this.props.reducers.menus;
+    return _.map(menus, ({ _id, name }) => ({key : _id, value : _id, text : name}));
+  };
 
   renderExtraButton = () => {
     return (
@@ -54,7 +63,7 @@ class Bocas extends Component {
           <Grid.Row>
             <Grid.Column/>
             <Grid.Column>
-              <Dropdown placeholder='Seleccione Menu' fluid search selection options={menus} />
+              <Dropdown placeholder='Seleccione Menu' fluid search selection options={this.getOptions()} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

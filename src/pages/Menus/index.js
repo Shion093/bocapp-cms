@@ -31,7 +31,10 @@ function mapDispatchToProps (dispatch) {
 class Menus extends Component {
 
   componentWillMount () {
-    this.props.actions.getAllMenus();
+    const { menus } = this.props.reducers.menus;
+    if (_.isEmpty(menus)) {
+      this.props.actions.getAllMenus();
+    }
   }
 
   renderExtraButton = () => {
