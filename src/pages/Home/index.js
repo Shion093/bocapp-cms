@@ -3,7 +3,6 @@ import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { decrement, decrementAsync, increment, incrementAsync } from '../../reducers/counter';
-import { handleInput } from '../../reducers/input';
 
 function mapStateToProps (state) {
   return state;
@@ -16,7 +15,6 @@ function mapDispatchToProps (dispatch) {
       incrementAsync,
       decrement,
       decrementAsync,
-      handleInput,
       changePage: () => push('/menus')
     }, dispatch),
   };
@@ -29,10 +27,6 @@ class Home extends Component {
         <h1>Home</h1>
         <p>Welcome home!</p>
         <p>Count: {this.props.reducers.counter.count}</p>
-        <p>Input: {this.props.reducers.input.inputValue}</p>
-
-        <input type="text" name="lastname" onChange={this.handleOnChange} />
-
         <p>
           <button onClick={this.props.actions.increment} disabled={this.props.reducers.counter.isIncrementing}>Increment</button>
           <button onClick={this.props.actions.incrementAsync} disabled={this.props.reducers.counter.isIncrementing}>Increment Async</button>
@@ -47,11 +41,6 @@ class Home extends Component {
         <button onClick={() => this.props.actions.changePage()}>Go to about page via redux</button>
       </div>
     )
-  }
-
-  handleOnChange = (e) => {
-    console.log(e.target.value)
-    this.props.actions.handleInput(e.target.value);
   }
 }
 

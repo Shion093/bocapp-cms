@@ -3,14 +3,14 @@ import { routerReducer } from 'react-router-redux'
 
 // Reducers
 import counter from './counter';
-import input from './input';
 import menus from './menus';
+import bocas from './bocas';
 import modals from './modals';
 
 export default combineReducers({
   routing : routerReducer,
-  input,
   counter,
   menus,
+  bocas,
   modals,
 })

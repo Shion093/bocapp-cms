@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Modal, Form, Transition } from 'semantic-ui-react';
+import { Modal, Form, Input, Transition, Label } from 'semantic-ui-react';
 import Cropper from 'react-cropper';
 
 import './styles.css';
@@ -10,7 +10,7 @@ import 'cropperjs/dist/cropper.css';
 
 // Reducers
 import { handleModal } from '../../reducers/modals';
-import { handleMenuInputs, createMenu, handleMenuLoader } from '../../reducers/menus';
+import { handleBocaInputs, handleBocaLoader, createBoca } from '../../reducers/bocas';
 
 function mapStateToProps(state) {
   return state;
@@ -19,32 +19,31 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions : bindActionCreators({
-      handleMenuLoader,
-      createMenu,
+      handleBocaLoader,
+      createBoca,
       handleModal,
-      handleMenuInputs,
+      handleBocaInputs,
       changePage : (page) => push(page)
     }, dispatch),
   };
 }
 
-class MenuModal extends Component {
+class BocaModal extends Component {
   render() {
-    const { createMenuModal } = this.props.reducers.modals;
-    const { create : { name, description, picture }, loader } = this.props.reducers.menus;
-    console.log(this.state);
+    const { createBocaModal } = this.props.reducers.modals;
+    const { create : { name, description, picture, price }, loader } = this.props.reducers.bocas;
     return (
-      <div className='MenuModal'>
-        <Transition animation='fade up' duration={ 600 } visible={ createMenuModal }>
+      <div className='BocaModal'>
+        <Transition animation='fade up' duration={ 600 } visible={ createBocaModal }>
           <Modal
             closeIcon
-            open={ createMenuModal }
+            open={ createBocaModal }
             onClose={ this.closeModal }>
             <Modal.Header>
               Crear Menu Nuevo
             </Modal.Header>
             <Modal.Content>
-              <Form onSubmit={ this.handleSubmit }>
+              <Form onSubmit={ this.handleSubmit } loading={loader}>
                 <Form.Input { ...{
                   disabled    : loader,
                   placeholder : 'Nombre',
@@ -53,7 +52,7 @@ class MenuModal extends Component {
                   value       : name,
                   onChange    : this.handleChange,
                 } }  />
-                <Form.Input { ...{
+                <Form.TextArea { ...{
                   disabled    : loader,
                   placeholder : 'Descripcion',
                   label       : 'Descripcion',
@@ -61,6 +60,24 @@ class MenuModal extends Component {
                   value       : description,
                   onChange    : this.handleChange,
                 } }  />
+
+                <Form.Field>
+                  <label>Precio</label>
+                  <Input { ...{
+                    disabled    : loader,
+                    placeholder : 'Precio',
+                    name        : 'price',
+                    value       : price,
+                    onChange    : this.handleChange,
+                    labelPosition : 'right',
+                    type          : 'number',
+                  } }>
+                    <Label basic>₡</Label>
+                    <input />
+                    <Label>.00</Label>
+                  </Input>
+                </Form.Field>
+
                 <Form.Input>
                 <span>
                   <label htmlFor='fileUploader' className='ui icon button'>
@@ -100,7 +117,7 @@ class MenuModal extends Component {
   }
 
   loadEditView = (url) => {
-    this.props.actions.handleMenuInputs('picture', url);
+    this.props.actions.handleBocaInputs('picture', url);
   };
 
   handleSelectImage = () => {
@@ -115,19 +132,19 @@ class MenuModal extends Component {
   };
 
   closeModal = () => {
-    this.props.actions.handleModal('createMenuModal');
+    this.props.actions.handleModal('createBocaModal');
   };
 
   handleSubmit = () => {
-    this.props.actions.handleMenuLoader();
+    this.props.actions.handleBocaLoader();
     this.refs.cropper.getCroppedCanvas().toBlob((blob) => {
-      this.props.actions.createMenu(blob);
+      this.props.actions.createBoca(blob);
     });
   };
 
   handleChange = (e, { name, value }) => {
-    this.props.actions.handleMenuInputs(name, value);
+    this.props.actions.handleBocaInputs(name, value);
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuModal)
+export default connect(mapStateToProps, mapDispatchToProps)(BocaModal)

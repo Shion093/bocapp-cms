@@ -23,6 +23,6 @@
   overflow-y: scroll;
   height: 100%;
 }
-.Bocas .column-scroll {
+.Bocas .column-scroll2 {
   height: calc(100vh - 47px);
 }

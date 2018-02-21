@@ -4,6 +4,7 @@ import { createAction, handleActions } from 'redux-actions';
 import axios from '../helpers/axios';
 
 import { HANDLE_MODAL } from './modals';
+import { MENU_SELECTED } from './bocas';
 
 export const MENU_CREATED = createAction('MENU_CREATED');
 export const MENU_GET_ALL = createAction('MENU_GET_ALL');
@@ -47,6 +48,7 @@ export function getAllMenus () {
     try {
       const { data } = await axios.get('menus');
       dispatch(MENU_GET_ALL(data));
+      dispatch(MENU_SELECTED(data[0]));
     } catch (e) {
       console.log(e);
     }
