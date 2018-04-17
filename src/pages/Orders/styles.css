@@ -1,28 +1,28 @@
-.Bocas .add-icon {
+.Orders .add-icon {
   height: 185px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.Bocas .add-icon > i.icon {
+.Orders .add-icon > i.icon {
   font-size: 60px;
   height: auto;
 }
-.Bocas .ui.card:first-child {
+.Orders .ui.card:first-child {
   margin-top: 20px !important;
   margin-bottom: 20px !important;
 }
-.Bocas .ui.card > .image {
+.Orders .ui.card > .image {
   height: 185px;
 }
-.Bocas .selected {
+.Orders .selected {
   overflow-y: scroll;
   height: 100%;
 }
-.Bocas .available {
+.Orders .available {
   overflow-y: scroll;
   height: 100%;
 }
-.Bocas .column-scroll2 {
+.Orders .column-scroll2 {
   height: calc(100vh - 47px);
 }

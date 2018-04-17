@@ -6,6 +6,7 @@ import counter from './counter';
 import menus from './menus';
 import bocas from './bocas';
 import modals from './modals';
+import orders from './orders';
 
 export default combineReducers({
   routing : routerReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   menus,
   bocas,
   modals,
+  orders,
 })

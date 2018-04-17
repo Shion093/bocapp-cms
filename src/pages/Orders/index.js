@@ -2,10 +2,18 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
-import { Button, Grid, Icon, Item, Image, Label, Dropdown } from 'semantic-ui-react';
+import moment from 'moment';
+import { Button, Grid, Icon, Item, Image, Label, Dropdown, Accordion } from 'semantic-ui-react';
 import _ from 'lodash';
+import 'moment/locale/es';
+
+// Reducers
+import { getAllOrders } from '../../reducers/orders';
 
 import './styles.css';
+
+moment.locale('es');
+
 
 const paragraph = <Image src='/assets/images/wireframe/short-paragraph.png' />
 
@@ -16,119 +24,54 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     actions : bindActionCreators({
+      getAllOrders,
       changePage: () => push('/')
     }, dispatch),
   };
 }
 
-const menus = [
-  { key: 'pl', value: 'pl', text: 'Platos' },
-  { key: 'ca', value: 'ca', text: 'Carnes' },
-  { key: 'bo', value: 'bo', text: 'Bocas' },
-  { key: 'be', value: 'bo', text: 'Bebidas' },
-];
-
 class Orders extends Component {
+  state = { activeIndex: 0 };
 
-  renderExtraButton = () => {
-    return (
-      <div className='ui two buttons'>
-        <Button basic color='blue'>Editar</Button>
-        <Button basic color='red'>Eliminar</Button>
-      </div>
-    )
-  };
+  componentWillMount () {
+    this.props.actions.getAllOrders();
+  }
 
-  renderCreateButton = () => {
-    return (
-      <div className='ui two buttons'>
-        <Button basic color='green'>Crear</Button>
-      </div>
-    )
-  };
+  handleClick = (e, titleProps) => {
+    const { index } = titleProps
+    const { activeIndex } = this.state
+    const newIndex = activeIndex === index ? -1 : index
+
+    this.setState({ activeIndex: newIndex })
+  }
 
   render () {
+    const { activeIndex } = this.state;
+    const { reducers : { orders : { orders }}} = this.props;
     return (
-      <div className='Bocas'>
-        <Grid columns={2} doubling className='dropDownMenus' padded>
-          <Grid.Row>
-            <Grid.Column/>
-            <Grid.Column>
-              <Dropdown placeholder='Seleccione Menu' fluid search selection options={menus} />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+      <div className='Orders'>
+        <Accordion fluid styled>
+          {
+            _.map(orders, (order, i) => {
+              return (
+                <div>
+                  <Accordion.Title active={activeIndex === i} index={i} onClick={this.handleClick}>
+                    <Icon name='dropdown' />
+                    {order.orderNumber} {moment(order.createdAt).format('LLL')} {order.total}
+                  </Accordion.Title>
+                  <Accordion.Content active={activeIndex === i}>
+                    {
+                      _.map(order.products, (product) => {
+                        return   <p>{product.qty} x {product.name} </p>
+                      })
+                    }
 
-        <Grid columns={2} doubling>
-          <Grid.Row>
-            <Grid.Column className='column-scroll'>
-              <Item.Group divided className='available'>
-
-
-                {
-                  _.times(10, ()=> {
-                    return (
-                      <Item>
-                        <Item.Image src='https://drop.ndtv.com/albums/COOKS/chicken-dinner/chickendinner_640x480.jpg' />
-
-                        <Item.Content>
-                          <Item.Header as='a'>My Neighbor Totoro</Item.Header>
-                          <Item.Meta>
-                            <span className='cinema'>IFC Cinema</span>
-                          </Item.Meta>
-                          <Item.Description>{paragraph}</Item.Description>
-                          <Item.Extra>
-                            <Button primary floated='right'>
-                              Buy tickets
-                              <Icon name='right chevron' />
-                            </Button>
-                            <Label>Limited</Label>
-                          </Item.Extra>
-                        </Item.Content>
-                      </Item>
-                    )
-                  })
-                }
-
-
-              </Item.Group>
-            </Grid.Column>
-
-            <Grid.Column className='column-scroll'>
-              <Item.Group divided className='available'>
-
-
-                {
-                  _.times(10, ()=> {
-                    return (
-                      <Item>
-                        <Item.Image src='https://drop.ndtv.com/albums/COOKS/chicken-dinner/chickendinner_640x480.jpg' />
-
-                        <Item.Content>
-                          <Item.Header as='a'>My Neighbor Totoro</Item.Header>
-                          <Item.Meta>
-                            <span className='cinema'>IFC Cinema</span>
-                          </Item.Meta>
-                          <Item.Description>{paragraph}</Item.Description>
-                          <Item.Extra>
-                            <Button primary floated='right'>
-                              Buy tickets
-                              <Icon name='right chevron' />
-                            </Button>
-                            <Label>Limited</Label>
-                          </Item.Extra>
-                        </Item.Content>
-                      </Item>
-                    )
-                  })
-                }
-
-
-              </Item.Group>
-            </Grid.Column>
-
-          </Grid.Row>
-        </Grid>
+                  </Accordion.Content>
+                </div>
+              )
+            })
+          }
+        </Accordion>
       </div>
     )
   }

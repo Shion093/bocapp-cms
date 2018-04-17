@@ -43,12 +43,14 @@ export function createMenu (blob) {
   }
 }
 
-export function getAllMenus () {
+export function getAllMenus (select = true) {
   return async (dispatch) => {
     try {
       const { data } = await axios.get('menus');
       dispatch(MENU_GET_ALL(data));
-      dispatch(MENU_SELECTED(data[0]));
+      if (select) {
+        dispatch(MENU_SELECTED(data[0]));
+      }
     } catch (e) {
       console.log(e);
     }
