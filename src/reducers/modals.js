@@ -4,8 +4,9 @@ import { createAction, handleActions } from 'redux-actions';
 export const HANDLE_MODAL = createAction('HANDLE_MODAL');
 
 export const initialState = I.from({
-  createMenuModal : false,
-  createBocaModal : false,
+  createMenuModal  : false,
+  createBocaModal  : false,
+  orderDetailModal : false,
 });
 
 export function handleModal (modal) {

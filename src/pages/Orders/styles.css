@@ -1,3 +1,7 @@
+.Orders {
+  height: calc(100vh - 47px);
+  overflow-y: auto;
+}
 .Orders .add-icon {
   height: 185px;
   display: flex;
