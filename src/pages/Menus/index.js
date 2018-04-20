@@ -9,7 +9,7 @@ import './styles.css';
 
 // Reducers
 import { handleModal } from '../../reducers/modals';
-import { getAllMenus } from '../../reducers/menus';
+import { getAllMenus, removeMenu } from '../../reducers/menus';
 
 // Components
 import MenuModal from '../../components/MenuModal';
@@ -24,6 +24,7 @@ function mapDispatchToProps (dispatch) {
     actions : bindActionCreators({
       getAllMenus,
       handleModal,
+      removeMenu,
       changePage: () => push('/')
     }, dispatch),
   };
@@ -40,12 +41,15 @@ class Menus extends Component {
   openModal = (modal, data) => () => {
     this.props.actions.handleModal(modal, data, 'menu');
   };
+  deleteMenu = (menuId) => () => {
+    this.props.actions.removeMenu(menuId);
+  };
 
   renderExtraButton = (menu) => {
     return (
       <div className='ui two buttons'>
         <Button basic color='blue' onClick={this.openModal('editMenuModal', menu)}>Editar</Button>
-        <Button basic color='red'>Eliminar</Button>
+        <Button basic color='red' onClick={this.deleteMenu(menu._id)}>Eliminar</Button>
       </div>
     )
   };

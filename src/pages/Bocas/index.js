@@ -37,14 +37,8 @@ function mapDispatchToProps (dispatch) {
 class Bocas extends Component {
 
   componentWillMount () {
-    const { menus } = this.props.reducers.menus;
-    const { bocas } = this.props.reducers.bocas;
-    if (_.isEmpty(menus)) {
-      this.props.actions.getAllMenus();
-    }
-    if (_.isEmpty(bocas)) {
-      this.props.actions.getAllBocas();
-    }
+    this.props.actions.getAllMenus();
+    this.props.actions.getAllBocas();
   }
 
   getOptions = () => {

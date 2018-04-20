@@ -1,17 +1,18 @@
 import I from 'seamless-immutable';
 import { createAction, handleActions } from 'redux-actions';
+import _ from 'lodash';
 
 import axios from '../helpers/axios';
 
 import { HANDLE_MODAL } from './modals';
-import { MENU_SELECTED } from './bocas';
+import { MENU_SELECTED, CLEAR_SELECTED_MENU } from './bocas';
 
 export const MENU_CREATED = createAction('MENU_CREATED');
 export const MENU_GET_ALL = createAction('MENU_GET_ALL');
 export const HANDLE_MENU_INPUT = createAction('HANDLE_MENU_INPUT');
 export const HANDLE_MENU_LOADER = createAction('HANDLE_MENU_LOADER');
 export const SELECT_MENU = createAction('SELECT_MENU');
-export const CLEAR_BOCA_INPUT = createAction('CLEAR_BOCA_INPUT');
+export const CLEAR_MENU_INPUT = createAction('CLEAR_MENU_INPUT');
 
 export const initialState = I.from({
   create : {
@@ -69,7 +70,7 @@ export function updateMenu (blob) {
       dispatch(HANDLE_MODAL('editMenuModal'));
       dispatch(HANDLE_MENU_LOADER());
       dispatch(MENU_GET_ALL(data));
-      dispatch(CLEAR_BOCA_INPUT());
+      dispatch(CLEAR_MENU_INPUT());
     } catch (e) {
       console.log(e);
     }
@@ -82,9 +83,23 @@ export function getAllMenus (select = true) {
     try {
       const { data } = await axios.get('menus');
       dispatch(MENU_GET_ALL(data));
-      if (select) {
+      if (select && !_.isEmpty(data)) {
         dispatch(MENU_SELECTED(data[0]));
       }
+      if (_.isEmpty(data)) {
+        dispatch(CLEAR_SELECTED_MENU());
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
+
+export function removeMenu (menuId) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.post('menus/delete', { menuId });
+      dispatch(MENU_GET_ALL(data));
     } catch (e) {
       console.log(e);
     }
@@ -104,7 +119,7 @@ export function handleMenuLoader () {
 }
 
 export default handleActions({
-  CLEAR_BOCA_INPUT : (state) => {
+  CLEAR_MENU_INPUT   : (state) => {
     return I.merge(state, { edit : initialState.edit });
   },
   MENU_CREATED       : (state, action) => {

@@ -15,6 +15,7 @@ export const HANDLE_BOCA_INPUT = createAction('HANDLE_BOCA_INPUT');
 export const HANDLE_BOCA_LOADER = createAction('HANDLE_BOCA_LOADER');
 export const SELECT_BOCA = createAction('SELECT_BOCA');
 export const CLEAR_BOCA_INPUT = createAction('CLEAR_BOCA_INPUT');
+export const CLEAR_SELECTED_MENU = createAction('CLEAR_SELECTED_MENU');
 
 export const initialState = I.from({
   create       : {
@@ -201,5 +202,8 @@ export default handleActions({
   },
   CLEAR_BOCA_INPUT   : (state) => {
     return I.merge(state, { edit : initialState.edit, create : initialState.create });
-  }
+  },
+  CLEAR_SELECTED_MENU   : (state) => {
+    return I.merge(state, { selectedMenu : initialState.selectedMenu });
+  },
 }, initialState)
