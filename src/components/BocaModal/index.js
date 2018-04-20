@@ -36,7 +36,6 @@ class BocaModal extends Component {
       <div className='BocaModal'>
         <Transition animation='fade up' duration={ 600 } visible={ createBocaModal }>
           <Modal
-            style={{marginTop : 0}}
             closeIcon
             open={ createBocaModal }
             onClose={ this.closeModal }>
