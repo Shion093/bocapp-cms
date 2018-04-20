@@ -114,7 +114,7 @@ class Bocas extends Component {
                               <Icon name='right chevron' />
                             </Button>
                             <Button primary floated='right' onClick={this.openModal('editBocaModal', boca)}>
-                              Editar Boca
+                              Editar
                               <Icon name='right chevron' />
                             </Button>
                           </Item.Extra>
@@ -140,12 +140,12 @@ class Bocas extends Component {
                           </Item.Meta>
                           <Item.Description>{description}</Item.Description>
                           <Item.Extra>
-                            <Button color='red' floated='right' onClick={this.handleBocaRemove(_id)}>
+                            <Button color='red' floated='left' onClick={this.handleBocaRemove(_id)}>
                               <Icon name='left chevron' />
-                              Remove del Menú
+                              Remover del Menu
                             </Button>
                             <Button primary floated='right' onClick={this.openModal('editBocaModal', boca)}>
-                              Editar Boca
+                              Editar
                               <Icon name='right chevron' />
                             </Button>
                           </Item.Extra>

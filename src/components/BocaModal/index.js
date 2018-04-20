@@ -31,7 +31,7 @@ function mapDispatchToProps(dispatch) {
 class BocaModal extends Component {
   render() {
     const { createBocaModal } = this.props.reducers.modals;
-    const { edit : { name, description, picture, price }, loader } = this.props.reducers.bocas;
+    const { create : { name, description, picture, price }, loader } = this.props.reducers.bocas;
     return (
       <div className='BocaModal'>
         <Transition animation='fade up' duration={ 600 } visible={ createBocaModal }>

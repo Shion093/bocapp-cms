@@ -14,15 +14,16 @@ export const MENU_SELECTED = createAction('MENU_SELECTED');
 export const HANDLE_BOCA_INPUT = createAction('HANDLE_BOCA_INPUT');
 export const HANDLE_BOCA_LOADER = createAction('HANDLE_BOCA_LOADER');
 export const SELECT_BOCA = createAction('SELECT_BOCA');
+export const CLEAR_BOCA_INPUT = createAction('CLEAR_BOCA_INPUT');
 
 export const initialState = I.from({
-  create : {
+  create       : {
     name        : '',
     description : '',
     picture     : '',
     price       : '',
   },
-  edit : {
+  edit         : {
     name        : '',
     description : '',
     picture     : '',
@@ -30,8 +31,8 @@ export const initialState = I.from({
     _id         : '',
     menu        : '',
   },
-  bocas  : [],
-  loader : false,
+  bocas        : [],
+  loader       : false,
   selectedMenu : {},
 });
 
@@ -51,12 +52,14 @@ export function createBoca (blob) {
       dispatch(HANDLE_MODAL('createBocaModal'));
       dispatch(HANDLE_BOCA_LOADER());
       dispatch(BOCA_CREATED(addNewBOCA));
+      dispatch(CLEAR_BOCA_INPUT());
     } catch (e) {
       console.log(e);
     }
 
   }
 }
+
 export function updateBoca (blob) {
   return async (dispatch, getState) => {
     try {
@@ -78,10 +81,24 @@ export function updateBoca (blob) {
       dispatch(HANDLE_BOCA_LOADER());
       dispatch(BOCA_GET_ALL(data.bocas));
       dispatch(MENU_SELECTED(data.menu));
+      dispatch(CLEAR_BOCA_INPUT());
     } catch (e) {
       console.log(e);
     }
 
+  }
+}
+
+export function deleteBoca (bocaId) {
+  return async (dispatch, getState) => {
+    try {
+      const { reducers : { bocas : { selectedMenu } } } = getState();
+      const { data } = await axios.post('bocas/delete', { bocaId, menuId : selectedMenu._id });
+      dispatch(BOCA_GET_ALL(data.bocas));
+      dispatch(MENU_SELECTED(data.menu));
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
@@ -158,28 +175,31 @@ export function handleBocaLoader () {
 }
 
 export default handleActions({
-  BOCA_CREATED : (state, action) => {
+  BOCA_CREATED       : (state, action) => {
     return I.merge(state, { bocas : action.payload });
   },
-  BOCA_GET_ALL : (state, action) => {
+  BOCA_GET_ALL       : (state, action) => {
     return I.merge(state, { bocas : action.payload });
   },
-  BOCA_ASSIGNED : (state, action) => {
+  BOCA_ASSIGNED      : (state, action) => {
     const { bocas, selectedMenu } = action.payload;
     return I.merge(state, { bocas, selectedMenu });
   },
-  HANDLE_BOCA_INPUT : (state, action) => {
+  HANDLE_BOCA_INPUT  : (state, action) => {
     const { type, name, value } = action.payload;
     return I.setIn(state, [type, name], value);
   },
   HANDLE_BOCA_LOADER : (state) => {
     return I.set(state, 'loader', !state.loader);
   },
-  MENU_SELECTED : (state, action) => {
+  MENU_SELECTED      : (state, action) => {
     return I.set(state, 'selectedMenu', action.payload);
   },
   SELECT_BOCA        : (state, action) => {
     const { name, description, picture, _id, price, menu } = action.payload;
     return I.merge(state, { edit : { name, description, picture, _id, price, menu } });
   },
+  CLEAR_BOCA_INPUT   : (state) => {
+    return I.merge(state, { edit : initialState.edit, create : initialState.create });
+  }
 }, initialState)

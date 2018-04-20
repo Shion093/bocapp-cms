@@ -11,6 +11,7 @@ export const MENU_GET_ALL = createAction('MENU_GET_ALL');
 export const HANDLE_MENU_INPUT = createAction('HANDLE_MENU_INPUT');
 export const HANDLE_MENU_LOADER = createAction('HANDLE_MENU_LOADER');
 export const SELECT_MENU = createAction('SELECT_MENU');
+export const CLEAR_BOCA_INPUT = createAction('CLEAR_BOCA_INPUT');
 
 export const initialState = I.from({
   create : {
@@ -68,6 +69,7 @@ export function updateMenu (blob) {
       dispatch(HANDLE_MODAL('editMenuModal'));
       dispatch(HANDLE_MENU_LOADER());
       dispatch(MENU_GET_ALL(data));
+      dispatch(CLEAR_BOCA_INPUT());
     } catch (e) {
       console.log(e);
     }
@@ -102,6 +104,9 @@ export function handleMenuLoader () {
 }
 
 export default handleActions({
+  CLEAR_BOCA_INPUT : (state) => {
+    return I.merge(state, { edit : initialState.edit });
+  },
   MENU_CREATED       : (state, action) => {
     return I.merge(state, { menus : action.payload, create : initialState.create });
   },
