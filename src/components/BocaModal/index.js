@@ -34,7 +34,7 @@ class BocaModal extends Component {
     const { create : { name, description, picture, price }, loader } = this.props.reducers.bocas;
     return (
       <div className='BocaModal'>
-        <Transition animation='fade up' duration={ 600 } visible={ createBocaModal }>
+
           <Modal
             closeIcon
             open={ createBocaModal }
@@ -111,7 +111,7 @@ class BocaModal extends Component {
               </Form>
             </Modal.Content>
           </Modal>
-        </Transition>
+
       </div>
     );
   }
