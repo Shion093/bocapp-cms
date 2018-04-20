@@ -4,9 +4,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 
-import './App.css';
-import 'semantic-ui-css/semantic.min.css';
-
 // Pages
 import Home from './pages/Home';
 import Menus from './pages/Menus';
