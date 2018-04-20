@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Modal, Form, Transition } from 'semantic-ui-react';
+import { Modal, Form, Transition, Input, Label } from 'semantic-ui-react';
 import Cropper from 'react-cropper';
 
 import './styles.css';
@@ -10,7 +10,8 @@ import 'cropperjs/dist/cropper.css';
 
 // Reducers
 import { handleModal } from '../../reducers/modals';
-import { handleMenuInputs, createMenu, handleMenuLoader } from '../../reducers/menus';
+import { handleBocaInputs, updateBoca, handleBocaLoader } from '../../reducers/bocas';
+import { convertImgToBase64URL } from '../../helpers/image';
 
 function mapStateToProps(state) {
   return state;
@@ -19,29 +20,32 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions : bindActionCreators({
-      handleMenuLoader,
-      createMenu,
+      handleBocaLoader,
+      updateBoca,
       handleModal,
-      handleMenuInputs,
+      handleBocaInputs,
       changePage : (page) => push(page)
     }, dispatch),
   };
 }
 
-class MenuModal extends Component {
+class BocaModalEdit extends Component {
+  state = {
+    isCropped : 0,
+  };
   render() {
-    const { createMenuModal } = this.props.reducers.modals;
-    const { create : { name, description, picture }, loader } = this.props.reducers.menus;
+    const { editBocaModal } = this.props.reducers.modals;
+    const { edit : { name, description, picture, price }, loader } = this.props.reducers.bocas;
     console.log(this.state);
     return (
-      <div className='MenuModal'>
-        <Transition animation='fade up' duration={ 600 } visible={ createMenuModal }>
+      <div className='BocaModal'>
+        <Transition animation='fade up' duration={ 600 } visible={ editBocaModal }>
           <Modal
             closeIcon
-            open={ createMenuModal }
+            open={ editBocaModal }
             onClose={ this.closeModal }>
             <Modal.Header>
-              Crear Menu Nuevo
+              Editar boca
             </Modal.Header>
             <Modal.Content>
               <Form onSubmit={ this.handleSubmit }>
@@ -61,6 +65,22 @@ class MenuModal extends Component {
                   value       : description,
                   onChange    : this.handleChange,
                 } }  />
+                <Form.Field>
+                  <label>Precio</label>
+                  <Input { ...{
+                    disabled    : loader,
+                    placeholder : 'Precio',
+                    name        : 'price',
+                    value       : price,
+                    onChange    : this.handleChange,
+                    labelPosition : 'right',
+                    type          : 'number',
+                  } }>
+                    <Label basic>₡</Label>
+                    <input />
+                    <Label>.00</Label>
+                  </Input>
+                </Form.Field>
                 <Form.Input>
                 <span>
                   <label htmlFor='fileUploader' className='ui icon button'>
@@ -85,11 +105,12 @@ class MenuModal extends Component {
                     style       : { height : 300, width : '100%' },
                     aspectRatio : 16 / 9,
                     guides      : false,
+                    crop        : this.croppedImage
                   } } />
                 </div>
 
                 <div style={ { marginTop : 20, width : 200 } }>
-                  <Form.Button content='Crear' positive fluid loading={ loader } disabled={loader}/>
+                  <Form.Button content='Editar' positive fluid loading={ loader } disabled={loader}/>
                 </div>
               </Form>
             </Modal.Content>
@@ -99,8 +120,14 @@ class MenuModal extends Component {
     );
   }
 
+  croppedImage = () => {
+    this.setState({
+      isCropped : this.state.isCropped + 1,
+    })
+  };
+
   loadEditView = (url) => {
-    this.props.actions.handleMenuInputs('create', 'picture', url);
+    this.props.actions.handleBocaInputs('edit', 'picture', url);
   };
 
   handleSelectImage = () => {
@@ -115,19 +142,29 @@ class MenuModal extends Component {
   };
 
   closeModal = () => {
-    this.props.actions.handleModal('createMenuModal');
+    this.setState({
+      isCropped : 0,
+    });
+    this.props.actions.handleModal('editBocaModal');
   };
 
   handleSubmit = () => {
-    this.props.actions.handleMenuLoader();
-    this.refs.cropper.getCroppedCanvas().toBlob((blob) => {
-      this.props.actions.createMenu(blob);
+    this.setState({
+      isCropped : 0,
     });
+    this.props.actions.handleBocaLoader();
+    if (this.state.isCropped > 1) {
+      this.refs.cropper.getCroppedCanvas().toBlob((blob) => {
+        this.props.actions.updateBoca(blob);
+      });
+    } else {
+      this.props.actions.updateBoca();
+    }
   };
 
   handleChange = (e, { name, value }) => {
-    this.props.actions.handleMenuInputs('create', name, value);
+    this.props.actions.handleBocaInputs('edit', name, value);
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuModal)
+export default connect(mapStateToProps, mapDispatchToProps)(BocaModalEdit)

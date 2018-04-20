@@ -9,6 +9,7 @@ import './styles.css';
 
 // Components
 import BocaModal from '../../components/BocaModal';
+import BocaModalEdit from '../../components/BocaModalEdit';
 
 // Reducers
 import { getAllMenus } from '../../reducers/menus';
@@ -51,8 +52,8 @@ class Bocas extends Component {
     return _.map(menus, ({ _id, name }) => ({key : _id, value : _id, text : name}));
   };
 
-  openCreateModal = () => {
-    this.props.actions.handleModal('createBocaModal');
+  openModal = (modal, data) => () => {
+    this.props.actions.handleModal(modal, data, 'boca');
   };
 
   dropDownChange = (e, { value }) => {
@@ -72,10 +73,11 @@ class Bocas extends Component {
     return (
       <div className='Bocas'>
         <BocaModal />
+        <BocaModalEdit />
         <Grid columns={2} doubling className='dropDownMenus' padded>
           <Grid.Row>
             <Grid.Column floated='left' width={3}>
-              <Button fluid positive onClick={this.openCreateModal}>Crear Nueva Boca</Button>
+              <Button fluid positive onClick={this.openModal('createBocaModal')}>Crear Nueva Boca</Button>
             </Grid.Column>
             <Grid.Column>
               <Dropdown { ...{
@@ -111,6 +113,10 @@ class Bocas extends Component {
                               Añadir al Menú
                               <Icon name='right chevron' />
                             </Button>
+                            <Button primary floated='right' onClick={this.openModal('editBocaModal', boca)}>
+                              Editar Boca
+                              <Icon name='right chevron' />
+                            </Button>
                           </Item.Extra>
                         </Item.Content>
                       </Item>
@@ -137,6 +143,10 @@ class Bocas extends Component {
                             <Button color='red' floated='right' onClick={this.handleBocaRemove(_id)}>
                               <Icon name='left chevron' />
                               Remove del Menú
+                            </Button>
+                            <Button primary floated='right' onClick={this.openModal('editBocaModal', boca)}>
+                              Editar Boca
+                              <Icon name='right chevron' />
                             </Button>
                           </Item.Extra>
                         </Item.Content>

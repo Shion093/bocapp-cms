@@ -11,6 +11,12 @@ export const initialState = I.from({
   orders        : [],
   loader        : false,
   selectedOrder : {},
+  orderStates   : [
+    { key : 'Procesando', value : 'Procesando', text : 'Procesando'},
+    { key : 'En cocina', value : 'En cocina' , text : 'En cocina'},
+    { key : 'Lista', value : 'Lista', text : 'Lista' },
+    { key : 'Entregada', value : 'Entregada', text : 'Entregada' }
+  ],
 });
 
 export function getAllOrders () {

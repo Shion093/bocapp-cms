@@ -13,6 +13,7 @@ import { getAllMenus } from '../../reducers/menus';
 
 // Components
 import MenuModal from '../../components/MenuModal';
+import MenuModalEdit from '../../components/MenuModalEdit';
 
 function mapStateToProps (state) {
   return state;
@@ -36,11 +37,14 @@ class Menus extends Component {
       this.props.actions.getAllMenus();
     }
   }
+  openModal = (modal, data) => () => {
+    this.props.actions.handleModal(modal, data, 'menu');
+  };
 
-  renderExtraButton = () => {
+  renderExtraButton = (menu) => {
     return (
       <div className='ui two buttons'>
-        <Button basic color='blue'>Editar</Button>
+        <Button basic color='blue' onClick={this.openModal('editMenuModal', menu)}>Editar</Button>
         <Button basic color='red'>Eliminar</Button>
       </div>
     )
@@ -49,21 +53,17 @@ class Menus extends Component {
   renderCreateButton = () => {
     return (
       <div className='ui two buttons'>
-        <Button basic color='green' onClick={this.openCreateModal}>Crear</Button>
+        <Button basic color='green' onClick={this.openModal('createMenuModal')}>Crear</Button>
       </div>
     )
   };
 
-  openCreateModal = () => {
-    this.props.actions.handleModal('createMenuModal')
-  };
-
   render () {
     const { menus } = this.props.reducers.menus;
-    console.log('hola');
     return (
       <div className="Menus">
         <MenuModal />
+        <MenuModalEdit />
         <Grid columns={4} doubling className='grid-scroll'>
           <Grid.Row className='inner-scroll'>
             <Grid.Column>
@@ -93,7 +93,7 @@ class Menus extends Component {
                       image  : picture,
                       header : name,
                       meta   : description,
-                      extra  : this.renderExtraButton(),
+                      extra  : this.renderExtraButton(menu),
                     } } />
                   </Grid.Column>
                 )

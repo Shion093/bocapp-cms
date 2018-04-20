@@ -13,6 +13,7 @@ export const BOCA_ASSIGNED = createAction('BOCA_ASSIGNED');
 export const MENU_SELECTED = createAction('MENU_SELECTED');
 export const HANDLE_BOCA_INPUT = createAction('HANDLE_BOCA_INPUT');
 export const HANDLE_BOCA_LOADER = createAction('HANDLE_BOCA_LOADER');
+export const SELECT_BOCA = createAction('SELECT_BOCA');
 
 export const initialState = I.from({
   create : {
@@ -20,6 +21,14 @@ export const initialState = I.from({
     description : '',
     picture     : '',
     price       : '',
+  },
+  edit : {
+    name        : '',
+    description : '',
+    picture     : '',
+    price       : '',
+    _id         : '',
+    menu        : '',
   },
   bocas  : [],
   loader : false,
@@ -42,6 +51,33 @@ export function createBoca (blob) {
       dispatch(HANDLE_MODAL('createBocaModal'));
       dispatch(HANDLE_BOCA_LOADER());
       dispatch(BOCA_CREATED(addNewBOCA));
+    } catch (e) {
+      console.log(e);
+    }
+
+  }
+}
+export function updateBoca (blob) {
+  return async (dispatch, getState) => {
+    try {
+      const { reducers : { bocas : { edit, menus, selectedMenu } } } = getState();
+      const form = new FormData();
+      const { description, name, _id, picture, price } = edit;
+      form.append('description', description);
+      form.append('name', name);
+      form.append('_id', _id);
+      form.append('price', price);
+      form.append('menuId', selectedMenu._id);
+      if (blob) {
+        form.append('picture', blob);
+      } else {
+        form.append('picture', picture);
+      }
+      const { data } = await axios.post('bocas/update', form);
+      dispatch(HANDLE_MODAL('editBocaModal'));
+      dispatch(HANDLE_BOCA_LOADER());
+      dispatch(BOCA_GET_ALL(data.bocas));
+      dispatch(MENU_SELECTED(data.menu));
     } catch (e) {
       console.log(e);
     }
@@ -109,9 +145,9 @@ export function removeBoca (bocaId) {
   }
 }
 
-export function handleBocaInputs (name, value) {
+export function handleBocaInputs (type, name, value) {
   return (dispatch) => {
-    dispatch(HANDLE_BOCA_INPUT({ name, value }))
+    dispatch(HANDLE_BOCA_INPUT({ type, name, value }))
   }
 }
 
@@ -133,12 +169,17 @@ export default handleActions({
     return I.merge(state, { bocas, selectedMenu });
   },
   HANDLE_BOCA_INPUT : (state, action) => {
-    return I.setIn(state, ['create', action.payload.name], action.payload.value);
+    const { type, name, value } = action.payload;
+    return I.setIn(state, [type, name], value);
   },
   HANDLE_BOCA_LOADER : (state) => {
     return I.set(state, 'loader', !state.loader);
   },
   MENU_SELECTED : (state, action) => {
     return I.set(state, 'selectedMenu', action.payload);
-  }
+  },
+  SELECT_BOCA        : (state, action) => {
+    const { name, description, picture, _id, price, menu } = action.payload;
+    return I.merge(state, { edit : { name, description, picture, _id, price, menu } });
+  },
 }, initialState)

@@ -10,7 +10,8 @@ import 'cropperjs/dist/cropper.css';
 
 // Reducers
 import { handleModal } from '../../reducers/modals';
-import { handleMenuInputs, createMenu, handleMenuLoader } from '../../reducers/menus';
+import { handleMenuInputs, updateMenu, handleMenuLoader } from '../../reducers/menus';
+import { convertImgToBase64URL } from '../../helpers/image';
 
 function mapStateToProps(state) {
   return state;
@@ -20,7 +21,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions : bindActionCreators({
       handleMenuLoader,
-      createMenu,
+      updateMenu,
       handleModal,
       handleMenuInputs,
       changePage : (page) => push(page)
@@ -28,20 +29,23 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-class MenuModal extends Component {
+class MenuModalEdit extends Component {
+  state = {
+    isCropped : 0,
+  };
   render() {
-    const { createMenuModal } = this.props.reducers.modals;
-    const { create : { name, description, picture }, loader } = this.props.reducers.menus;
+    const { editMenuModal } = this.props.reducers.modals;
+    const { edit : { name, description, picture }, loader } = this.props.reducers.menus;
     console.log(this.state);
     return (
       <div className='MenuModal'>
-        <Transition animation='fade up' duration={ 600 } visible={ createMenuModal }>
+        <Transition animation='fade up' duration={ 600 } visible={ editMenuModal }>
           <Modal
             closeIcon
-            open={ createMenuModal }
+            open={ editMenuModal }
             onClose={ this.closeModal }>
             <Modal.Header>
-              Crear Menu Nuevo
+              Editar menu
             </Modal.Header>
             <Modal.Content>
               <Form onSubmit={ this.handleSubmit }>
@@ -85,11 +89,12 @@ class MenuModal extends Component {
                     style       : { height : 300, width : '100%' },
                     aspectRatio : 16 / 9,
                     guides      : false,
+                    crop        : this.croppedImage
                   } } />
                 </div>
 
                 <div style={ { marginTop : 20, width : 200 } }>
-                  <Form.Button content='Crear' positive fluid loading={ loader } disabled={loader}/>
+                  <Form.Button content='Editar' positive fluid loading={ loader } disabled={loader}/>
                 </div>
               </Form>
             </Modal.Content>
@@ -99,8 +104,14 @@ class MenuModal extends Component {
     );
   }
 
+  croppedImage = () => {
+    this.setState({
+      isCropped : this.state.isCropped + 1,
+    })
+  };
+
   loadEditView = (url) => {
-    this.props.actions.handleMenuInputs('create', 'picture', url);
+    this.props.actions.handleMenuInputs('edit', 'picture', url);
   };
 
   handleSelectImage = () => {
@@ -115,19 +126,29 @@ class MenuModal extends Component {
   };
 
   closeModal = () => {
-    this.props.actions.handleModal('createMenuModal');
+    this.setState({
+      isCropped : 0,
+    });
+    this.props.actions.handleModal('editMenuModal');
   };
 
   handleSubmit = () => {
-    this.props.actions.handleMenuLoader();
-    this.refs.cropper.getCroppedCanvas().toBlob((blob) => {
-      this.props.actions.createMenu(blob);
+    this.setState({
+      isCropped : 0,
     });
+    this.props.actions.handleMenuLoader();
+    if (this.state.isCropped > 1) {
+      this.refs.cropper.getCroppedCanvas().toBlob((blob) => {
+        this.props.actions.updateMenu(blob);
+      });
+    } else {
+      this.props.actions.updateMenu();
+    }
   };
 
   handleChange = (e, { name, value }) => {
-    this.props.actions.handleMenuInputs('create', name, value);
+    this.props.actions.handleMenuInputs('edit', name, value);
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuModal)
+export default connect(mapStateToProps, mapDispatchToProps)(MenuModalEdit)

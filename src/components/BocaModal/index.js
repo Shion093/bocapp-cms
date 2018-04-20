@@ -31,7 +31,7 @@ function mapDispatchToProps(dispatch) {
 class BocaModal extends Component {
   render() {
     const { createBocaModal } = this.props.reducers.modals;
-    const { create : { name, description, picture, price }, loader } = this.props.reducers.bocas;
+    const { edit : { name, description, picture, price }, loader } = this.props.reducers.bocas;
     return (
       <div className='BocaModal'>
         <Transition animation='fade up' duration={ 600 } visible={ createBocaModal }>
@@ -40,7 +40,7 @@ class BocaModal extends Component {
             open={ createBocaModal }
             onClose={ this.closeModal }>
             <Modal.Header>
-              Crear Menu Nuevo
+              Crear Boca Nueva
             </Modal.Header>
             <Modal.Content>
               <Form onSubmit={ this.handleSubmit } loading={loader}>
@@ -117,7 +117,7 @@ class BocaModal extends Component {
   }
 
   loadEditView = (url) => {
-    this.props.actions.handleBocaInputs('picture', url);
+    this.props.actions.handleBocaInputs('create', 'picture', url);
   };
 
   handleSelectImage = () => {
@@ -143,7 +143,7 @@ class BocaModal extends Component {
   };
 
   handleChange = (e, { name, value }) => {
-    this.props.actions.handleBocaInputs(name, value);
+    this.props.actions.handleBocaInputs('create', name, value);
   }
 }
 

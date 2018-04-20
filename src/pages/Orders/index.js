@@ -24,8 +24,6 @@ const orderStatus = [
   { key : 'Lista', value : 'Lista', text : 'Lista' }
 ];
 
-const paragraph = <Image src='/assets/images/wireframe/short-paragraph.png'/>
-
 function mapStateToProps(state) {
   return state;
 }
@@ -59,7 +57,7 @@ class Orders extends Component {
 
   render() {
     const { activeIndex } = this.state;
-    const { reducers : { orders : { orders } } } = this.props;
+    const { reducers : { orders : { orders, orderStates } } } = this.props;
     return (
       <div className='Orders'>
         <Table celled>
@@ -85,7 +83,7 @@ class Orders extends Component {
                         placeholder='Estado'
                         selection
                         value={order.status}
-                        options={orderStatus}
+                        options={orderStates}
                         onChange={this.handleOnChange(order._id)}
                       />
                     </Table.Cell>
