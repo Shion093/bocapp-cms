@@ -6,12 +6,10 @@ import { Modal, Form, Transition, Input, Label } from 'semantic-ui-react';
 import Cropper from 'react-cropper';
 
 import './styles.css';
-import 'cropperjs/dist/cropper.css';
 
 // Reducers
 import { handleModal } from '../../reducers/modals';
 import { handleBocaInputs, updateBoca, handleBocaLoader } from '../../reducers/bocas';
-import { convertImgToBase64URL } from '../../helpers/image';
 
 function mapStateToProps(state) {
   return state;

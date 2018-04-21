@@ -6,12 +6,10 @@ import { Modal, Form, Transition } from 'semantic-ui-react';
 import Cropper from 'react-cropper';
 
 import './styles.css';
-import 'cropperjs/dist/cropper.css';
 
 // Reducers
 import { handleModal } from '../../reducers/modals';
 import { handleMenuInputs, updateMenu, handleMenuLoader } from '../../reducers/menus';
-import { convertImgToBase64URL } from '../../helpers/image';
 
 function mapStateToProps(state) {
   return state;

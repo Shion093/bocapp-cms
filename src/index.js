@@ -8,6 +8,7 @@ import store, { history } from './store';
 import App from './App';
 
 import 'semantic-ui-css/semantic.min.css';
+import 'cropperjs/dist/cropper.css';
 import './App.css';
 import './index.css';
 

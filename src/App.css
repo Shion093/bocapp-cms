@@ -5,10 +5,6 @@
 .ui.inverted.menu.top-bar {
   border-radius: 0;
 }
-.ui.active.dimmer.modals.transition {
-  display: flex !important;
-  display: -ms-flexbox !important;
-}
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
@@ -28,6 +24,9 @@
 .Main {
   padding-top: 57px;
   padding-left: 160px;
+}
+.mainLogin {
+  height: 100%;
 }
 @keyframes App-logo-spin {
   from {
