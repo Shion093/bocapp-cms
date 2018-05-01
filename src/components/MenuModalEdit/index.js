@@ -6,7 +6,6 @@ import { Modal, Form, Transition } from 'semantic-ui-react';
 import Cropper from 'react-cropper';
 
 import './styles.css';
-import 'cropperjs/dist/cropper.css';
 
 // Reducers
 import { handleModal } from '../../reducers/modals';

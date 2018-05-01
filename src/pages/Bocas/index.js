@@ -66,8 +66,6 @@ class Bocas extends Component {
     const { bocas : { bocas, selectedMenu } } = this.props.reducers;
     return (
       <div className='Bocas'>
-        <BocaModal />
-        <BocaModalEdit />
         <Grid columns={2} doubling className='dropDownMenus' padded>
           <Grid.Row>
             <Grid.Column floated='left' width={3}>

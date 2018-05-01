@@ -13,6 +13,8 @@ import Orders from './pages/Orders';
 // Components
 import SideBar from './components/SideBar';
 import TopBar from './components/TopBar';
+import BocaModal from './components/BocaModal';
+import BocaModalEdit from './components/BocaModalEdit';
 
 // Reducers
 import { decrement, decrementAsync, increment, incrementAsync } from './reducers/counter';
@@ -56,6 +58,8 @@ class App extends Component {
       <div className="App">
         <SideBar/>
         <TopBar />
+        <BocaModal />
+        <BocaModalEdit />
         <main className="Main">
           <Route exact path="/" component={Home}/>
           <Route exact path="/menus" component={Menus}/>

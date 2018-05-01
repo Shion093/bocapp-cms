@@ -6,7 +6,6 @@ import { Modal, Form, Transition, Table, Header, Image } from 'semantic-ui-react
 import _ from 'lodash';
 
 import './styles.css';
-import 'cropperjs/dist/cropper.css';
 
 // Reducers
 import { handleModal } from '../../reducers/modals';
