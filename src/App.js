@@ -43,6 +43,7 @@ class App extends Component {
         <SideBar/>
         <TopBar/>
         <main className="Main">
+          <ConnectedRoute exact path="/login" render={() => <Redirect to="/"/>}/>
           <ConnectedRoute exact path="/" component={Home}/>
           <ConnectedRoute exact path="/menus" component={Menus}/>
           <ConnectedRoute exact path="/bocas" component={Bocas}/>

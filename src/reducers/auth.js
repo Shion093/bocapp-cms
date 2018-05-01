@@ -7,7 +7,7 @@ export const LOGGED_IN = createAction('LOGGED_IN');
 export const HANDLE_LOGIN_INPUT = createAction('HANDLE_LOGIN_INPUT');
 
 export const initialState = I.from({
-  loggedIn : false,
+  loggedIn : !!localStorage.getItem('token'),
   userInfo : {
     email    : '',
     password : '',
@@ -20,6 +20,11 @@ export function handleLogin() {
       const { reducers : { auth : { userInfo } } } = getState();
       const { data } = await axios.post('auth/login/admin', userInfo);
       console.log(data);
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        dispatch(LOGGED_IN());
+        dispatch(push('/'));
+      }
       // dispatch(LOGGED_IN());
       // dispatch(push('/'));
     } catch (err) {
