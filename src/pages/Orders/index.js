@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Button, Grid, Icon, Item, Image, Label, Dropdown, Accordion, Table, Sticky } from 'semantic-ui-react';
+import { Dropdown, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import 'moment/locale/es';
 
@@ -17,12 +17,6 @@ import './styles.css';
 import { formatPrice } from '../../helpers/formats';
 
 moment.locale('es');
-
-const orderStatus = [
-  { key : 'Procesando', value : 'Procesando', text : 'Procesando'},
-  { key : 'En cocina', value : 'En cocina' , text : 'En cocina'},
-  { key : 'Lista', value : 'Lista', text : 'Lista' }
-];
 
 function mapStateToProps(state) {
   return state;
@@ -56,7 +50,6 @@ class Orders extends Component {
   };
 
   render() {
-    const { activeIndex } = this.state;
     const { reducers : { orders : { orders, orderStates } } } = this.props;
     return (
       <div className='Orders'>
@@ -67,7 +60,7 @@ class Orders extends Component {
               <Table.HeaderCell>Fecha</Table.HeaderCell>
               <Table.HeaderCell>Estado</Table.HeaderCell>
               <Table.HeaderCell>Total</Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell />
             </Table.Row>
           </Table.Header>
 

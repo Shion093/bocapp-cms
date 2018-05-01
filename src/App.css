@@ -25,6 +25,9 @@
   padding-top: 57px;
   padding-left: 160px;
 }
+.mainLogin {
+  height: 100%;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

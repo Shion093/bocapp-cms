@@ -10,7 +10,6 @@ import './styles.css';
 // Reducers
 import { handleModal } from '../../reducers/modals';
 import { handleMenuInputs, updateMenu, handleMenuLoader } from '../../reducers/menus';
-import { convertImgToBase64URL } from '../../helpers/image';
 
 function mapStateToProps(state) {
   return state;
