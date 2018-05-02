@@ -15,6 +15,7 @@ import Login from './pages/Login';
 import SideBar from './components/SideBar';
 import TopBar from './components/TopBar';
 import ConnectedRoute from './components/ConnectedRoute';
+import ConnectedSwitch from './components/ConnectedSwitch';
 
 // Reducers
 import { decrement, decrementAsync, increment, incrementAsync } from './reducers/counter';
@@ -42,12 +43,11 @@ class App extends Component {
       <div>
         <SideBar/>
         <TopBar/>
-        <main className="Main">
-          <ConnectedRoute exact path="/login" render={() => <Redirect to="/"/>}/>
-          <ConnectedRoute exact path="/" component={Home}/>
-          <ConnectedRoute exact path="/menus" component={Menus}/>
-          <ConnectedRoute exact path="/bocas" component={Bocas}/>
-          <ConnectedRoute exact path="/ordenes" component={Orders}/>
+        <main className='Main'>
+          <ConnectedRoute exact path='/' component={Home}/>
+          <ConnectedRoute exact path='/menus' component={Menus}/>
+          <ConnectedRoute exact path='/bocas' component={Bocas}/>
+          <ConnectedRoute exact path='/ordenes' component={Orders}/>
         </main>
       </div>
     )
@@ -57,8 +57,8 @@ class App extends Component {
     return (
       <div className='mainLogin'>
         <main className='mainLogin'>
-          <ConnectedRoute exact path="/" render={() => <Redirect to="/login"/>}/>
-          <ConnectedRoute path="/login" component={Login}/>
+          <ConnectedRoute exact path='/' render={() => <Redirect to='/login' />}/>
+          <ConnectedRoute path='/login' component={Login} />
         </main>
       </div>
     )
@@ -67,20 +67,29 @@ class App extends Component {
   render () {
     const { reducers : { auth : { loggedIn }}} = this.props;
     return (
-      <div className="App">
-        <Switch>
-          <ConnectedRoute exact path="/(login)" component={this.LoginContainer}/>
+      <div className='App'>
+        <ConnectedSwitch>
+          <ConnectedRoute exact path='/(login)' render={
+            props => !loggedIn
+              ? (this.LoginContainer())
+              : (
+                <Redirect to={{
+                  pathname : '/',
+                  state    : { from : props.location }
+                }}/>
+              )
+          } />
           <ConnectedRoute render={
             props => loggedIn
               ? (this.DefaultContainer())
               : (
                 <Redirect to={{
-                  pathname : "/login",
+                  pathname : '/login',
                   state    : { from : props.location }
                 }}/>
               )
           }/>
-        </Switch>
+        </ConnectedSwitch>
       </div>
     );
   }

@@ -13,6 +13,7 @@ export const initialState = I.from({
   orderDetailModal : false,
   editMenuModal    : false,
   editBocaModal    : false,
+  confirmModal     : false,
 });
 
 export function handleModal (modal, data, type) {
