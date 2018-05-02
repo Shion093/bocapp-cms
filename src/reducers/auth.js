@@ -28,6 +28,7 @@ export function handleLogin() {
       const { data } = await axios.post('auth/login/admin', userInfo);
       if (data.token && data.user) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('refreshToken', data.refreshToken);
         localStorage.setItem('user', JSON.stringify(data.user));
         dispatch(LOGGED_IN(true));
         dispatch(SET_USER(data.user));
