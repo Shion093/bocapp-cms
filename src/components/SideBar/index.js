@@ -20,6 +20,7 @@ function mapDispatchToProps (dispatch) {
 
 class SideBar extends Component {
   render() {
+    const { reducers : { auth : { currentUser }}} = this.props;
     return (
       <div className="SideBar">
         <Menu vertical inverted icon='labeled' fluid>
@@ -39,6 +40,13 @@ class SideBar extends Component {
             <Icon name='cart'/>
             Ordenes
           </Menu.Item>
+          {
+            currentUser.role === 'superAdmin' &&
+            <Menu.Item name='restaurantes' onClick={ this.goToPage('/restaurantes') }>
+              <Icon name='factory'/>
+              Restaurantes
+            </Menu.Item>
+          }
         </Menu>
       </div>
     );

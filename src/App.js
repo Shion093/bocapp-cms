@@ -10,6 +10,7 @@ import Menus from './pages/Menus';
 import Bocas from './pages/Bocas';
 import Orders from './pages/Orders';
 import Login from './pages/Login';
+import Restaurants from './pages/Restaurants';
 
 // Components
 import SideBar from './components/SideBar';
@@ -21,11 +22,11 @@ import ConnectedSwitch from './components/ConnectedSwitch';
 import { decrement, decrementAsync, increment, incrementAsync } from './reducers/counter';
 
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return state;
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     actions : bindActionCreators({
       increment,
@@ -39,15 +40,24 @@ function mapDispatchToProps (dispatch) {
 
 class App extends Component {
   DefaultContainer = () => {
+    const { reducers : { auth : { currentUser } } } = this.props;
     return (
       <div>
         <SideBar/>
         <TopBar/>
         <main className='Main'>
-          <ConnectedRoute exact path='/' component={Home}/>
-          <ConnectedRoute exact path='/menus' component={Menus}/>
-          <ConnectedRoute exact path='/bocas' component={Bocas}/>
-          <ConnectedRoute exact path='/ordenes' component={Orders}/>
+          <ConnectedRoute exact path='/' component={ Home }/>
+          <ConnectedRoute exact path='/menus' component={ Menus }/>
+          <ConnectedRoute exact path='/bocas' component={ Bocas }/>
+          <ConnectedRoute exact path='/ordenes' component={ Orders }/>
+          <ConnectedRoute exact path='/restaurantes' render={
+            props => currentUser.role === 'superAdmin'
+              ? <Restaurants/>
+              : <Redirect to={ {
+                pathname : '/',
+                state    : { from : props.location }
+              } } />
+          } />
         </main>
       </div>
     )
@@ -57,15 +67,15 @@ class App extends Component {
     return (
       <div className='mainLogin'>
         <main className='mainLogin'>
-          <ConnectedRoute exact path='/' render={() => <Redirect to='/login' />}/>
-          <ConnectedRoute path='/login' component={Login} />
+          <ConnectedRoute exact path='/' render={ () => <Redirect to='/login'/> }/>
+          <ConnectedRoute path='/login' component={ Login }/>
         </main>
       </div>
     )
   };
 
-  render () {
-    const { reducers : { auth : { loggedIn }}} = this.props;
+  render() {
+    const { reducers : { auth : { loggedIn } } } = this.props;
     return (
       <div className='App'>
         <ConnectedSwitch>
@@ -73,20 +83,20 @@ class App extends Component {
             props => !loggedIn
               ? (this.LoginContainer())
               : (
-                <Redirect to={{
+                <Redirect to={ {
                   pathname : '/',
                   state    : { from : props.location }
-                }}/>
+                } }/>
               )
-          } />
+          }/>
           <ConnectedRoute render={
             props => loggedIn
               ? (this.DefaultContainer())
               : (
-                <Redirect to={{
+                <Redirect to={ {
                   pathname : '/login',
                   state    : { from : props.location }
-                }}/>
+                } }/>
               )
           }/>
         </ConnectedSwitch>

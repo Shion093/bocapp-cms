@@ -14,6 +14,7 @@ export const initialState = I.from({
   editMenuModal    : false,
   editBocaModal    : false,
   confirmModal     : false,
+  restaurantModal  : false,
 });
 
 export function handleModal (modal, data, type) {
