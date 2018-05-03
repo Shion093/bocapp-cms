@@ -13,4 +13,6 @@ artifacts:
   files:
     - $CODEBUILD_SRC_DIR/build/**/*
     - $CODEBUILD_SRC_DIR/scripts/*
+  files:
     - $CODEBUILD_SRC_DIR/appspec.yml
+  discard-paths: yes
