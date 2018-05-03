@@ -11,7 +11,7 @@ phases:
       - cd $CODEBUILD_SRC_DIR; npm run build
   post_build:
     commands:
-      - cd $CODEBUILD_SRC_DIR/build; zip -r ../package.zip *
+      - cd $CODEBUILD_SRC_DIR; zip -r ../package.zip *
 artifacts:
   files:
     - package.zip
