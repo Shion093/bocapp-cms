@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+      - sudo apt-get install -y nodejs
+  build:
+    commands:
+      - cd $CODEBUILD_SRC_DIR; npm install
+      - cd $CODEBUILD_SRC_DIR; npm run build
+  post_build:
+    commands:
+      - cd $CODEBUILD_SRC_DIR/build; zip -r ../package.zip *
+artifacts:
+  files:
+    - package.zip
+  discard-paths: yes
