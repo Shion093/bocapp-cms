@@ -17,9 +17,9 @@ import SideBar from './components/SideBar';
 import TopBar from './components/TopBar';
 import ConnectedRoute from './components/ConnectedRoute';
 import ConnectedSwitch from './components/ConnectedSwitch';
+import { checkAuth } from './helpers/auth';
 
 // Reducers
-import { decrement, decrementAsync, increment, incrementAsync } from './reducers/counter';
 
 
 function mapStateToProps(state) {
@@ -29,10 +29,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions : bindActionCreators({
-      increment,
-      incrementAsync,
-      decrement,
-      decrementAsync,
       changePage : (page) => push(page)
     }, dispatch),
   };
@@ -75,12 +71,12 @@ class App extends Component {
   };
 
   render() {
-    const { reducers : { auth : { loggedIn } } } = this.props;
+    console.log(checkAuth());
     return (
       <div className='App'>
         <ConnectedSwitch>
           <ConnectedRoute exact path='/(login)' render={
-            props => !loggedIn
+            props => !checkAuth()
               ? (this.LoginContainer())
               : (
                 <Redirect to={ {
@@ -90,7 +86,7 @@ class App extends Component {
               )
           }/>
           <ConnectedRoute render={
-            props => loggedIn
+            props => checkAuth()
               ? (this.DefaultContainer())
               : (
                 <Redirect to={ {

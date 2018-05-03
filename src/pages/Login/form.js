@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react';
 
 // Reducers
-import { handleLogin, handleLoginInputs } from '../../reducers/auth';
+import { handleLogin, handleLoginInputs, clearUser } from '../../reducers/auth';
 
 import './styles.css'
-
 
 function mapStateToProps(state) {
   return state;
@@ -16,6 +15,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions : bindActionCreators({
+      clearUser,
       handleLogin,
       handleLoginInputs,
     }, dispatch),
@@ -23,6 +23,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 class LoginForm extends Component {
+  componentDidMount () {
+    this.props.actions.clearUser()
+  }
   login = () => {
     this.props.actions.handleLogin();
   };

@@ -8,6 +8,9 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(function (config) {
+  if (!config.headers) {
+    config.headers = {};
+  }
   const token = localStorage.getItem('token');
   const refreshToken = localStorage.getItem('refreshToken');
   config.headers.Authorization = token ? `bearer ${token}` : '';
@@ -15,6 +18,7 @@ instance.interceptors.request.use(function (config) {
   // Do something before request is sent
   return config;
 }, function (error) {
+  console.log(error);
   // Do something with request error
   return Promise.reject(error);
 });
@@ -23,9 +27,9 @@ instance.interceptors.request.use(function (config) {
 instance.interceptors.response.use(function (response) {
   // Do something with response data
   const token = response.headers['x-token'];
-  console.log(response)
   console.log(token)
   const refreshToken = response.headers['x-refresh-token'];
+  console.log(refreshToken)
   if (token) {
     localStorage.setItem('token', token);
   }

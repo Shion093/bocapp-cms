@@ -13,7 +13,6 @@ const localUser = localStorage.getItem('user');
 const user = localUser ? JSON.parse(localUser) : {};
 
 export const initialState = I.from({
-  loggedIn    : !!localStorage.getItem('token'),
   userInfo    : {
     email    : '',
     password : '',
@@ -40,17 +39,22 @@ export function handleLogin() {
   }
 }
 
-export function handleLogout() {
-  return async (dispatch, getState) => {
-    try {
-      const { reducers : { auth : { userInfo } } } = getState();
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      dispatch(LOGGED_OUT(false));
-      dispatch(push('/login'));
-    } catch (err) {
-      console.log(err);
-    }
+export function clearUser () {
+  return (dispatch) => {
+    localStorage.setItem('token', '');
+    localStorage.setItem('refreshToken', '');
+    localStorage.setItem('user', '');
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    dispatch(LOGGED_OUT(false));
+  }
+}
+
+export function handleLogout () {
+  return (dispatch) => {
+    dispatch(clearUser());
+    dispatch(push('/login'));
   }
 }
 
@@ -61,11 +65,11 @@ export function handleLoginInputs(type, name, value) {
 }
 
 export default handleActions({
-  LOGGED_IN          : (state, action) => {
-    return I.merge(state, { loggedIn : action.payload, userInfo : initialState.userInfo });
+  LOGGED_IN          : (state) => {
+    return I.merge(state, { userInfo : initialState.userInfo });
   },
-  LOGGED_OUT          : (state, action) => {
-    return I.merge(state, { loggedIn : action.payload, user : {} });
+  LOGGED_OUT          : (state) => {
+    return I.merge(state, { user : {} });
   },
   HANDLE_LOGIN_INPUT : (state, action) => {
     const { type, name, value } = action.payload;
