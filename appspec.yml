@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/CMS
+    destination: /home/ubuntu/CMS/build
 permissions:
   - object: /
     pattern: "**"
@@ -11,16 +11,3 @@ permissions:
     type:
       - directory
       - file
-hooks:
-  BeforeInstall:
-    - location: scripts/beforeinstall.sh
-      timeout: 2000
-      runas: ubuntu
-  AfterInstall:
-    - location: scripts/afterinstall.sh
-      timeout: 2000
-      runas: ubuntu
-  ApplicationStart:
-    - location: scripts/start.sh
-      timeout: 2000
-      runas: ubuntu
