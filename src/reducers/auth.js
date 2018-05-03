@@ -10,7 +10,7 @@ export const SET_USER = createAction('SET_USER');
 
 const localUser = localStorage.getItem('user');
 
-const user = localUser ? JSON.parse(localUser) : {};
+const user = localUser ? JSON.parse(localUser) : { };
 
 export const initialState = I.from({
   userInfo    : {
