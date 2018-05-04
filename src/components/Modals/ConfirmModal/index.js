@@ -7,7 +7,7 @@ import { Modal, Transition } from 'semantic-ui-react';
 import './styles.css';
 
 // Reducers
-import { handleModal } from '../../reducers/modals';
+import { handleModal } from '../../../reducers/modals';
 
 function mapStateToProps(state) {
   return state;
