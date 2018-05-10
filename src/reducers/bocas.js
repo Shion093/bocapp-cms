@@ -40,7 +40,12 @@ export const initialState = I.from({
 export function createBoca (blob) {
   return async (dispatch, getState) => {
     try {
-      const { reducers : { bocas : { create, bocas } } } = getState();
+      const {
+        reducers : {
+          bocas : { create, bocas },
+          auth : { currentUser : { restaurant } }
+        }
+      } = getState();
       const form = new FormData();
       const { description, name, price } = create;
       form.append('description', description);
@@ -104,9 +109,9 @@ export function deleteBoca (bocaId) {
 }
 
 export function getAllBocas () {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      const { data } = await axios.get('bocas');
+      const { data } = await axios.get('bocas/admin/all');
       dispatch(BOCA_GET_ALL(data));
     } catch (e) {
       console.log(e);

@@ -11,21 +11,22 @@ export const HANDLE_RESTAURANT_INPUT = createAction('HANDLE_RESTAURANT_INPUT');
 export const HANDLE_RESTAURANT_LOADER = createAction('HANDLE_RESTAURANT_LOADER');
 
 export const initialState = I.from({
-  create : {
+  create     : {
     name        : '',
     description : '',
     url         : '',
     email       : '',
   },
-  edit   : {
+  edit       : {
     name        : '',
     description : '',
     url         : '',
     email       : '',
     _id         : '',
   },
-  menus  : [],
-  loader : false,
+  menus      : [],
+  loader     : false,
+  restaurant : {},
 });
 
 export function createRestaurant (bocaId) {
@@ -33,6 +34,18 @@ export function createRestaurant (bocaId) {
     try {
       const { reducers : { restaurants : { create } } } = getState();
       const { data } = await axios.post('restaurant/create', create);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
+
+export function getRestaurant () {
+  return async (dispatch, getState) => {
+    try {
+      const { reducers : { restaurants : { create } } } = getState();
+      const { data } = await axios.get('restaurant');
+      console.log(data);
     } catch (e) {
       console.log(e);
     }
@@ -52,7 +65,7 @@ export function handleMenuLoader () {
   }
 }
 
-export default handleActions({
+export default handleActions ({
   HANDLE_RESTAURANT_INPUT  : (state, action) => {
     const { type, name, value } = action.payload;
     return I.setIn(state, [type, name], value);

@@ -33,7 +33,11 @@ export const initialState = I.from({
 export function createMenu (blob) {
   return async (dispatch, getState) => {
     try {
-      const { reducers : { menus : { create, menus } } } = getState();
+      const {
+        reducers : {
+          menus : { create, menus },
+        }
+      } = getState();
       const form = new FormData();
       const { description, name } = create;
       form.append('description', description);
@@ -81,7 +85,7 @@ export function updateMenu (blob) {
 export function getAllMenus (select = true) {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get('menus');
+      const { data } = await axios.get('menus/admin/all');
       dispatch(MENU_GET_ALL(data));
       if (select && !_.isEmpty(data)) {
         dispatch(MENU_SELECTED(data[0]));
