@@ -9,7 +9,7 @@ import { handleLogout } from '../../reducers/auth';
 import { handleModal } from '../../reducers/modals';
 
 // Components
-import ConfirmModal from '../ConfirmModal';
+import ConfirmModal from '../Modals/ConfirmModal';
 
 import './styles.css';
 
