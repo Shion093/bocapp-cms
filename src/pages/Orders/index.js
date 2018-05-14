@@ -8,7 +8,7 @@ import _ from 'lodash';
 import 'moment/locale/es';
 
 // Components
-import OrderDetailModal from '../../components/OrderDetailModal';
+import OrderDetailModal from '../../components/Modals/OrderDetailModal';
 
 // Reducers
 import { getAllOrders, selectOrder, changeOrderStatus } from '../../reducers/orders';

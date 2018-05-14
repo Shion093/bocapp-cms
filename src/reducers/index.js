@@ -8,6 +8,7 @@ import bocas from './bocas';
 import modals from './modals';
 import orders from './orders';
 import auth from './auth';
+import restaurants from './restaurants';
 
 export default combineReducers({
   routing : routerReducer,
@@ -17,4 +18,5 @@ export default combineReducers({
   modals,
   orders,
   auth,
+  restaurants,
 })

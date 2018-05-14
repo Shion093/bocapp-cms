@@ -12,8 +12,8 @@ import { handleModal } from '../../reducers/modals';
 import { getAllMenus, removeMenu } from '../../reducers/menus';
 
 // Components
-import MenuModal from '../../components/MenuModal';
-import MenuModalEdit from '../../components/MenuModalEdit';
+import MenuModal from '../../components/Modals/MenuModal';
+import MenuModalEdit from '../../components/Modals/MenuModalEdit';
 
 function mapStateToProps (state) {
   return state;

@@ -16,6 +16,7 @@ export const HANDLE_BOCA_LOADER = createAction('HANDLE_BOCA_LOADER');
 export const SELECT_BOCA = createAction('SELECT_BOCA');
 export const CLEAR_BOCA_INPUT = createAction('CLEAR_BOCA_INPUT');
 export const CLEAR_SELECTED_MENU = createAction('CLEAR_SELECTED_MENU');
+export const CLEAR_BOCA_STATE = createAction('CLEAR_BOCA_STATE');
 
 export const initialState = I.from({
   create       : {
@@ -40,7 +41,12 @@ export const initialState = I.from({
 export function createBoca (blob) {
   return async (dispatch, getState) => {
     try {
-      const { reducers : { bocas : { create, bocas } } } = getState();
+      const {
+        reducers : {
+          bocas : { create, bocas },
+          auth : { currentUser : { restaurant } }
+        }
+      } = getState();
       const form = new FormData();
       const { description, name, price } = create;
       form.append('description', description);
@@ -104,9 +110,9 @@ export function deleteBoca (bocaId) {
 }
 
 export function getAllBocas () {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      const { data } = await axios.get('bocas');
+      const { data } = await axios.get('bocas/admin/all');
       dispatch(BOCA_GET_ALL(data));
     } catch (e) {
       console.log(e);
@@ -205,5 +211,8 @@ export default handleActions({
   },
   CLEAR_SELECTED_MENU   : (state) => {
     return I.merge(state, { selectedMenu : initialState.selectedMenu });
+  },
+  CLEAR_BOCA_STATE : (state) => {
+    return I.merge(state, initialState);
   },
 }, initialState)

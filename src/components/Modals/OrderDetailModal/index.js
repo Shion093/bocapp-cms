@@ -8,9 +8,9 @@ import _ from 'lodash';
 import './styles.css';
 
 // Reducers
-import { handleModal } from '../../reducers/modals';
-import { handleMenuInputs, createMenu, handleMenuLoader } from '../../reducers/menus';
-import { formatPrice } from '../../helpers/formats';
+import { handleModal } from '../../../reducers/modals';
+import { handleMenuInputs, createMenu, handleMenuLoader } from '../../../reducers/menus';
+import { formatPrice } from '../../../helpers/formats';
 
 function mapStateToProps(state) {
   return state;

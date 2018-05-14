@@ -8,8 +8,8 @@ import _ from 'lodash';
 import './styles.css';
 
 // Components
-import BocaModal from '../../components/BocaModal';
-import BocaModalEdit from '../../components/BocaModalEdit';
+import BocaModal from '../../components/Modals/BocaModal';
+import BocaModalEdit from '../../components/Modals/BocaModalEdit';
 
 // Reducers
 import { getAllMenus } from '../../reducers/menus';
@@ -66,6 +66,8 @@ class Bocas extends Component {
     const { bocas : { bocas, selectedMenu } } = this.props.reducers;
     return (
       <div className='Bocas'>
+        <BocaModal/>
+        <BocaModalEdit/>
         <Grid columns={2} doubling className='dropDownMenus' padded>
           <Grid.Row>
             <Grid.Column floated='left' width={3}>

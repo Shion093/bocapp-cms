@@ -3,6 +3,10 @@ import { createAction, handleActions } from 'redux-actions';
 import { push } from 'react-router-redux';
 import axios from '../helpers/axios';
 
+// Reducers
+import { CLEAR_MENU_STATE } from './menus';
+import { CLEAR_BOCA_STATE } from './bocas';
+
 export const LOGGED_IN = createAction('LOGGED_IN');
 export const LOGGED_OUT = createAction('LOGGED_OUT');
 export const HANDLE_LOGIN_INPUT = createAction('HANDLE_LOGIN_INPUT');
@@ -54,6 +58,8 @@ export function clearUser () {
 export function handleLogout () {
   return (dispatch) => {
     dispatch(clearUser());
+    dispatch(CLEAR_MENU_STATE());
+    dispatch(CLEAR_BOCA_STATE());
     dispatch(push('/login'));
   }
 }

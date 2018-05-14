@@ -40,7 +40,7 @@ class LoginForm extends Component {
         <Grid.Column style={ { maxWidth : 450, width : 450 } }>
           <Header as='h2' color='teal' textAlign='center'>
             { /*<Image src='/logo.png' />*/ }
-            BocaApp Login
+            BocaApp
           </Header>
           <Form size='large' onSubmit={ this.login }>
             <Segment stacked>
@@ -59,6 +59,7 @@ class LoginForm extends Component {
                 iconPosition : 'left',
                 placeholder  : 'Contraseña',
                 name         : 'password',
+                type         : 'password',
                 onChange     : this.handleChange,
               } } />
               <Button color='teal' fluid size='large'>Iniciar sesión</Button>

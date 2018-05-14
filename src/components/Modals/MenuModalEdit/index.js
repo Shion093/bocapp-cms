@@ -8,8 +8,8 @@ import Cropper from 'react-cropper';
 import './styles.css';
 
 // Reducers
-import { handleModal } from '../../reducers/modals';
-import { handleMenuInputs, updateMenu, handleMenuLoader } from '../../reducers/menus';
+import { handleModal } from '../../../reducers/modals';
+import { handleMenuInputs, updateMenu, handleMenuLoader } from '../../../reducers/menus';
 
 function mapStateToProps(state) {
   return state;
@@ -46,7 +46,7 @@ class MenuModalEdit extends Component {
               Editar menu
             </Modal.Header>
             <Modal.Content>
-              <Form onSubmit={ this.handleSubmit }>
+              <Form onSubmit={ this.handleSubmit } loading={loader}>
                 <Form.Input { ...{
                   disabled    : loader,
                   placeholder : 'Nombre',
