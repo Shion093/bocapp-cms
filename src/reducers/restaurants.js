@@ -14,13 +14,13 @@ export const initialState = I.from({
   create     : {
     name        : '',
     description : '',
-    url         : '',
+    domain      : '',
     email       : '',
   },
   edit       : {
     name        : '',
     description : '',
-    url         : '',
+    domain      : '',
     email       : '',
     _id         : '',
   },
@@ -65,7 +65,7 @@ export function handleMenuLoader () {
   }
 }
 
-export default handleActions ({
+export default handleActions({
   HANDLE_RESTAURANT_INPUT  : (state, action) => {
     const { type, name, value } = action.payload;
     return I.setIn(state, [type, name], value);

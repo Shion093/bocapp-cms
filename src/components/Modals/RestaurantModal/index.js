@@ -28,7 +28,7 @@ function mapDispatchToProps(dispatch) {
 class RestaurantModal extends Component {
   render() {
     const { restaurantModal } = this.props.reducers.modals;
-    const { create : { name, description, url, email }, loader } = this.props.reducers.restaurants;
+    const { create : { name, description, domain, email }, loader } = this.props.reducers.restaurants;
     return (
       <Transition animation='fade up' duration={ 600 } visible={ restaurantModal }>
         <Modal
@@ -71,8 +71,8 @@ class RestaurantModal extends Component {
                     labelPosition : 'right',
                     label         : 'Direccion Web',
                     type          : 'text',
-                    name          : 'url',
-                    value         : url,
+                    name          : 'domain',
+                    value         : domain,
                     onChange      : this.handleChange,
                   } }>
                     <Label basic>https://</Label>

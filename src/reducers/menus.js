@@ -13,6 +13,7 @@ export const HANDLE_MENU_INPUT = createAction('HANDLE_MENU_INPUT');
 export const HANDLE_MENU_LOADER = createAction('HANDLE_MENU_LOADER');
 export const SELECT_MENU = createAction('SELECT_MENU');
 export const CLEAR_MENU_INPUT = createAction('CLEAR_MENU_INPUT');
+export const CLEAR_MENU_STATE = createAction('CLEAR_MENU_STATE');
 
 export const initialState = I.from({
   create : {
@@ -142,5 +143,8 @@ export default handleActions({
   SELECT_MENU        : (state, action) => {
     const { name, description, picture, _id } = action.payload;
     return I.merge(state, { edit : { name, description, picture, _id } });
+  },
+  CLEAR_MENU_STATE : (state) => {
+    return I.merge(state, initialState);
   },
 }, initialState)
