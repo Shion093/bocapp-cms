@@ -50,7 +50,8 @@ class Orders extends Component {
   };
 
   render() {
-    const { reducers : { orders : { orders, orderStates } } } = this.props;
+    const { reducers : { orders : { orders, orderStates }, modals: { orderDetailModal } } } = this.props;
+
     return (
       <div className='Orders'>
         <Table celled>

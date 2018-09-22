@@ -13,10 +13,12 @@
     "watch-css": "npm run build-css && node-less-chokidar src/ -o src/ --watch --recursive"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-geocoder": "^2.3.0",
     "axios": "^0.17.1",
     "history": "^4.7.2",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
+    "mapbox-gl": "^0.48.0",
     "moment": "^2.22.1",
     "react": "^16.2.0",
     "react-cropper": "^1.0.1",
