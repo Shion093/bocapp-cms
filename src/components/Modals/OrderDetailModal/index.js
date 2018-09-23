@@ -3,8 +3,6 @@ import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Modal, Transition, Table, Header, Image } from 'semantic-ui-react';
-import Print from '@material-ui/icons/Print';
-import Button from '@material-ui/core/Button';
 import _ from 'lodash';
 import mapboxgl from 'mapbox-gl';
 import { withStyles } from '@material-ui/core';
@@ -67,7 +65,7 @@ class OrderDetailModal extends Component<Props> {
       container : this.mapContainer.current,
       style     : 'mapbox://styles/mapbox/streets-v9',
       center    : [coordinates[1], coordinates[0]],
-      zoom      : 16,
+      zoom      : 15,
     });
   
     this.map.on('load', () => {
@@ -94,135 +92,73 @@ class OrderDetailModal extends Component<Props> {
   };
 
   printDiv = () => {
-    // console.log('llega');
-    var contenido= document.getElementById('areaImprimir').innerHTML;
-    var contenidoOriginal= document.body.innerHTML;
-    console.log(contenido, contenidoOriginal)
-    document.body.innerHTML = contenido;
-    
-    // setTimeout(() => {
-      window.print();
-    // }, 200);
-    document.body.innerHTML = contenidoOriginal;
+    const { selectedOrder : { orderNumber, products, address, total } } = this.props.reducers.orders;
+    var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+    mywindow.document.write('<html><head><title></title>');
+    mywindow.document.write('</head><body>');
+    mywindow.document.write(`<h2>Orden: #${orderNumber}</h2>`);
+    _.map(products, (product, index) => {
+      return  mywindow.document.write(`<p className={ classes.line } key={index}>${product.qty} - ${product.name}</p>`);
+    });
+    mywindow.document.write(`<p className={ classes.line } key={index}>Total: ${formatPrice(total || 0)}</p>`);
+    mywindow.document.write('</body></html>');
+
+    mywindow.document.close();
+    mywindow.focus();
+
+    mywindow.print();
+    mywindow.close();
+    this.closeModal();
+    return true;
   }
   
   render() {
     const { classes } = this.props;
     const { orderDetailModal } = this.props.reducers.modals;
-    const { selectedOrder : { orderNumber, products, address } } = this.props.reducers.orders;
+    const { selectedOrder : { orderNumber, products, address, total } } = this.props.reducers.orders;
     return (
-      <div className='MenuModal'>
-        
-      <div>         
-        <h3><center>
-        {
-          _.map(products, (product) => {
-            return (
-              <div key={product._id}>
-                    <Image src={product.picture} style={{height: 200, width: 200}} rounded size='mini' />
-                    <h1 style={{fontSize: 50}}>
-                      {product.qty}
-                      {/*<Header.Subheader>Human Resources</Header.Subheader>*/}
-                    </h1>
-                    <h1 style={{fontSize: 50}}>
-                      {product.name}
-                    </h1>
-                <h1 style={{fontSize: 50}}>
-                  {formatPrice(product.price)}
-                </h1>
-              </div>
-            )
-          })
-        }
-        </center></h3>
-      </div>
+      <div className='MenuModal' className={ classes.ordenModal }>
         <Transition animation='fade up' duration={ 600 } visible={ orderDetailModal }>
           <Modal
             closeIcon
+            size="tiny"
             open={ orderDetailModal }
             onClose={ this.closeModal }>
             <Modal.Header>
-              Detalles de la orden {orderNumber}
+              Detalles del pedido
             </Modal.Header>
-            <Modal.Content>
-              <div ref={ this.mapContainer } className={ classes.map }/>
-              <div className={ classes.container } id="areaImprimir">
-
-                <p className={ classes.line }>San Isidro, Pérez Zeledón</p>
-                <p className={ classes.line }>Teléfono: (506) 83166927</p>
-
-                <p className={ classes.line }>_________________________________________ </p>
-
-                <p className={ classes.line }>DescripciónMonto </p>
-                <p className={ classes.line }>_________________________________________</p>
-
-
-                <p className={ classes.line }>Servicio ₡1000 <br /> de restaurante </p>
-              
-
-                <p className={ classes.line }>_________________________________________ </p>
-
-
-
-                <p className={ classes.line }>_________________________________________</p>
-
-
-                <p className={ classes.line }>ACOGIDO AL RÉGIMEN DE TRIBUTACIÓN SIMPLIFICADA</p>
-                <br />
-                <div className={ classes.line }>
-                  Tavuel506, 2018
-                </div>
-              </div>
-              <Table basic='very' celled collapsing>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Cantidad</Table.HeaderCell>
-                    <Table.HeaderCell>Nombre</Table.HeaderCell>
-                    <Table.HeaderCell>Precio</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-
-                <Table.Body>
+            <Modal.Content className={ classes.billContainer }>
+              <div className={ classes.billContainer } >
+                <p className={ classes.line }>Orden #{orderNumber}</p>
+                  <p className={ classes.line }>-----------------------</p>
                   {
-                    _.map(products, (product) => {
+                    _.map(products, (product, index) => {
                       return (
-                        <Table.Row key={product._id}>
-                          <Table.Cell>
-                            <Header as='h4' image>
-                              <Image src={product.picture} rounded size='mini' />
-                              <Header.Content>
-                                {product.qty}
-                                {/*<Header.Subheader>Human Resources</Header.Subheader>*/}
-                              </Header.Content>
-                            </Header>
-                          </Table.Cell>
-                          <Table.Cell>
-                            {product.name}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {formatPrice(product.price)}
-                          </Table.Cell>
-                        </Table.Row>
-                      )
+
+                        <p className={ classes.line } key={index}>{product.qty}-{product.name}</p>
+                      );
                     })
                   }
-                  
-                </Table.Body>
-              </Table>
-              {
-                address &&
-                <div>
-                  <label>Address</label>
-                  <p>{address.address}</p>
-                  <label>Referencias</label>
-                  <p>{address.references}</p>
-                  <label>Local o casa color</label>
-                  <p>{address.color}</p>
-                </div>
-              }
-              <Button variant="fab" color="primary" aria-label="Add" onClick={this.printDiv} className={classes.button}>
-                <Print />
-              </Button>
+                  <p className={ classes.line }>-----------------------</p>
+                  <p className={ classes.line }>Total: {formatPrice(total || 0)}</p>
+                  <p className={ classes.line }>-----------------------</p>
+                  </div>
+                    {
+                      address &&
+                      <React.Fragment>
+                        <p className={ classes.line }>Dirección</p>
+                        <p className={ classes.line } >{address.address}</p>
+                        <label>Referencias</label>
+                        <p>{address.references}</p>
+                        <label>Local o casa color</label>
+                        <p>{address.color}</p>
+                      </React.Fragment>
+                    }
+              <div ref={ this.mapContainer } className={ classes.map }/>
+              <button class='ui primary button' role='button' onClick={this.printDiv} className={classes.button}>
+                Imprimir
+              </button>
             </Modal.Content>
           </Modal>
         </Transition>
