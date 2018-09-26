@@ -32,7 +32,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-class OrderDetailModal extends Component<Props> {
+class OrderDetailModal extends Component {
   constructor (props) {
     super(props);
 
@@ -92,9 +92,12 @@ class OrderDetailModal extends Component<Props> {
     mywindow.document.write('<html><head><title></title>');
     mywindow.document.write('</head><body>');
     mywindow.document.write(`<h2>Orden: #${orderNumber}</h2>`);
+    mywindow.document.write('<p className="line">-----------------------</p>');
     _.map(products, (product, index) => {
       return  mywindow.document.write(`<p className="line">${product.qty} - ${product.name}</p>`);
     });
+    mywindow.document.write('<p className="line">Detalles de la order: Sin queso</p>');
+    mywindow.document.write('<p className="line">-----------------------</p>');
     mywindow.document.write(`<p className="line">Total: ${formatPrice(total || 0)}</p>`);
     mywindow.document.write('</body></html>');
 
