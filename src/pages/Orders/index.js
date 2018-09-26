@@ -35,17 +35,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 class Orders extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeIndex: 0,
-      search: '',
-      startDate: null,
-      endDate: null,
-      focusedInput: null,
-    }
-  }
-
   componentWillMount() {
     this.props.actions.getAllOrders();
   }
@@ -58,28 +47,6 @@ class Orders extends Component {
   handleOnChange = (orderId) => (e, { value }) => {
     this.props.actions.changeOrderStatus(orderId, value);
   };
-
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
-  };
-
-  handleChangeDate = (startDate, endDate) => event => {
-    this.setState({
-      startDate,
-      endDate,
-    });
-  };
-
-  onDatesChange({ startDate, endDate }: Object) {
-    this.setState({ startDate, endDate });
-    this.props.onChange(startDate, endDate);
-  }
-
-  onFocusChange(focusedInput: string) {
-    this.setState({ focusedInput });
-  }
 
   render() {
     const { reducers: { orders: { orders, orderStates }, modals: { orderDetailModal } } } = this.props;

@@ -10,6 +10,7 @@ import App from './App';
 import 'cropperjs/dist/cropper.css';
 import 'semantic-ui-css/semantic.min.css';
 import 'cropperjs/dist/cropper.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css';
 import './index.css';
 
