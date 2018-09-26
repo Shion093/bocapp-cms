@@ -3,9 +3,10 @@ import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Dropdown, Table } from 'semantic-ui-react';
+import { Dropdown, Table, Input } from 'semantic-ui-react';
 import _ from 'lodash';
 import 'moment/locale/es';
+import fuzzyFilterFactory from 'react-fuzzy-filter';
 
 // Components
 import OrderDetailModal from '../../components/Modals/OrderDetailModal';
@@ -24,17 +25,26 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions : bindActionCreators({
+    actions: bindActionCreators({
       getAllOrders,
       changeOrderStatus,
       selectOrder,
-      changePage : () => push('/')
+      changePage: () => push('/')
     }, dispatch),
   };
 }
 
 class Orders extends Component {
-  state = { activeIndex : 0 };
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeIndex: 0,
+      search: '',
+      startDate: null,
+      endDate: null,
+      focusedInput: null,
+    }
+  }
 
   componentWillMount() {
     this.props.actions.getAllOrders();
@@ -49,13 +59,51 @@ class Orders extends Component {
     this.props.actions.changeOrderStatus(orderId, value);
   };
 
-  render() {
-    const { reducers : { orders : { orders, orderStates }, modals: { orderDetailModal } } } = this.props;
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
 
+  handleChangeDate = (startDate, endDate) => event => {
+    this.setState({
+      startDate,
+      endDate,
+    });
+  };
+
+  onDatesChange({ startDate, endDate }: Object) {
+    this.setState({ startDate, endDate });
+    this.props.onChange(startDate, endDate);
+  }
+
+  onFocusChange(focusedInput: string) {
+    this.setState({ focusedInput });
+  }
+
+  render() {
+    const { reducers: { orders: { orders, orderStates }, modals: { orderDetailModal } } } = this.props;
+    const { InputFilter, FilterResults } = fuzzyFilterFactory();
+    const fuseConfig = {
+      keys: ['orderNumber'],
+      threshold: 0.0,
+    };
     return (
       <div className='Orders'>
+        <div></div>
         <Table celled>
           <Table.Header>
+            <Table.Row>
+              <Table.Cell>
+                <Table.HeaderCell>
+                  <InputFilter debounceTime={ 200 } className="input-filter" inputProps={ { placeholder: "Buscar orden..." } } />
+                  <button className='ui icon button' role='button' onClick={() => this.props.actions.getAllOrders()}>
+                    Refrescar ordenes <i aria-hidden='true' className='refresh icon' />
+                  </button>
+                </Table.HeaderCell>
+                
+              </Table.Cell>
+            </Table.Row>
             <Table.Row>
               <Table.HeaderCell>Numero de Orden</Table.HeaderCell>
               <Table.HeaderCell>Fecha</Table.HeaderCell>
@@ -64,34 +112,49 @@ class Orders extends Component {
               <Table.HeaderCell />
             </Table.Row>
           </Table.Header>
-
-          <Table.Body>
-            {
-              _.map(orders, (order, i) => {
+            <FilterResults { ...{
+              fuseConfig,
+              items: orders,
+            } }>
+              {
+              (filteredOrders) => {
+                if (filteredOrders.length === 0) {
+                  return (
+                    <h3 className="no-found">No se encontraron ordenes</h3>
+                  );
+                }
                 return (
-                  <Table.Row key={order._id}>
-                    <Table.Cell>{ order.orderNumber }</Table.Cell>
-                    <Table.Cell>{ moment(order.createdAt).format('LLL') }</Table.Cell>
-                    <Table.Cell>
-                      <Dropdown
-                        placeholder='Estado'
-                        selection
-                        value={order.status}
-                        options={orderStates}
-                        onChange={this.handleOnChange(order._id)}
-                      />
-                    </Table.Cell>
-                    <Table.Cell>{ formatPrice(order.total) }</Table.Cell>
-                    <Table.Cell selectable>
-                      <a href='' onClick={this.handleClick(order)}>Detalles</a>
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              })
+                  <Table.Body>
+                  { 
+                    _.map(filteredOrders, (order) => {
+                      return (
+                        <Table.Row key={order._id}>
+                          <Table.Cell>{order.orderNumber}</Table.Cell>
+                          <Table.Cell>{moment(order.createdAt).format('LLL')}</Table.Cell>
+                          <Table.Cell>
+                            <Dropdown
+                              placeholder='Estado'
+                              selection
+                              value={order.status}
+                              options={orderStates}
+                              onChange={this.handleOnChange(order._id)}
+                            />
+                          </Table.Cell>
+                          <Table.Cell>{formatPrice(order.total)}</Table.Cell>
+                          <Table.Cell selectable>
+                            <a href='' onClick={this.handleClick(order)}>Detalles</a>
+                          </Table.Cell>
+                        </Table.Row>
+                      );
+                    })
+                  }
+                  </Table.Body>
+                );
+              }
             }
-          </Table.Body>
+          </FilterResults>
         </Table>
-        <OrderDetailModal />
+        {orderDetailModal && <OrderDetailModal />}
       </div>
     )
   }

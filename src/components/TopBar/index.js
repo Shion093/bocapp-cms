@@ -46,9 +46,6 @@ class TopBar extends Component {
           message : 'Estas seguro que quieres cerrar sesion?'
         }}  />
         <Menu.Menu position='right'>
-          <Menu.Item>
-            <Input icon='search' placeholder='Buscar...'/>
-          </Menu.Item>
           <Menu.Item name='Salir' onClick={this.handleModal}/>
         </Menu.Menu>
       </Menu>
