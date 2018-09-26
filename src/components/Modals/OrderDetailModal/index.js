@@ -5,9 +5,8 @@ import { connect } from 'react-redux';
 import { Modal, Transition, Table, Header, Image } from 'semantic-ui-react';
 import _ from 'lodash';
 import mapboxgl from 'mapbox-gl';
-import { withStyles } from '@material-ui/core';
-
-import styles from './styles';
+ 
+import './styles.css';
 
 // Reducers
 import { handleModal } from '../../../reducers/modals';
@@ -20,6 +19,7 @@ function mapStateToProps(state) {
   return state;
 }
 
+
 function mapDispatchToProps(dispatch) {
   return {
     actions : bindActionCreators({
@@ -30,10 +30,6 @@ function mapDispatchToProps(dispatch) {
       changePage : (page) => push(page)
     }, dispatch),
   };
-}
-
-type Props = {
-  clasess : Object,
 }
 
 class OrderDetailModal extends Component<Props> {
@@ -53,7 +49,6 @@ class OrderDetailModal extends Component<Props> {
 
   addMarker = (e) => {
     const { lngLat } = e;
-    console.log('esta aqui la vara', e);
     new mapboxgl.Marker()
       .setLngLat([lngLat.lng, lngLat.lat])
       .addTo(this.map);
@@ -87,7 +82,6 @@ class OrderDetailModal extends Component<Props> {
   }
 
   closeModal = () => {
-
     this.props.actions.handleModal('orderDetailModal');
   };
 
@@ -99,9 +93,9 @@ class OrderDetailModal extends Component<Props> {
     mywindow.document.write('</head><body>');
     mywindow.document.write(`<h2>Orden: #${orderNumber}</h2>`);
     _.map(products, (product, index) => {
-      return  mywindow.document.write(`<p className={ classes.line } key={index}>${product.qty} - ${product.name}</p>`);
+      return  mywindow.document.write(`<p className="line">${product.qty} - ${product.name}</p>`);
     });
-    mywindow.document.write(`<p className={ classes.line } key={index}>Total: ${formatPrice(total || 0)}</p>`);
+    mywindow.document.write(`<p className="line">Total: ${formatPrice(total || 0)}</p>`);
     mywindow.document.write('</body></html>');
 
     mywindow.document.close();
@@ -114,49 +108,51 @@ class OrderDetailModal extends Component<Props> {
   }
   
   render() {
-    const { classes } = this.props;
     const { orderDetailModal } = this.props.reducers.modals;
     const { selectedOrder : { orderNumber, products, address, total } } = this.props.reducers.orders;
     return (
-      <div className='MenuModal' className={ classes.ordenModal }>
+      <div >
         <Transition animation='fade up' duration={ 600 } visible={ orderDetailModal }>
           <Modal
             closeIcon
             size="tiny"
             open={ orderDetailModal }
+            className="OrderModal"
             onClose={ this.closeModal }>
             <Modal.Header>
               Detalles del pedido
             </Modal.Header>
-            <Modal.Content className={ classes.billContainer }>
-              <div className={ classes.billContainer } >
-                <p className={ classes.line }>Orden #{orderNumber}</p>
-                  <p className={ classes.line }>-----------------------</p>
+            <Modal.Content className="bill-container">
+              <div className="bill-container" >
+                <p className="line">Orden #{orderNumber}</p>
+                  <p className="line">-----------------------</p>
                   {
                     _.map(products, (product, index) => {
                       return (
 
-                        <p className={ classes.line } key={index}>{product.qty}-{product.name}</p>
+                        <p className="line" key={index}>{product.qty}-{product.name}</p>
                       );
                     })
                   }
-                  <p className={ classes.line }>-----------------------</p>
-                  <p className={ classes.line }>Total: {formatPrice(total || 0)}</p>
-                  <p className={ classes.line }>-----------------------</p>
+                  <p className="line">-----------------------</p>
+                  <p className="line">Detalles de la order: Sin queso</p>
+                  <p className="line">-----------------------</p>
+                  <p className="line">Total: {formatPrice(total || 0)}</p>
+                  <p className="line">-----------------------</p>
                   </div>
                     {
                       address &&
                       <React.Fragment>
-                        <p className={ classes.line }>Dirección</p>
-                        <p className={ classes.line } >{address.address}</p>
+                        <p className="line">Dirección</p>
+                        <p className="line">{address.address}</p>
                         <label>Referencias</label>
-                        <p>{address.references}</p>
+                        <p className="line">{address.references}</p>
                         <label>Local o casa color</label>
-                        <p>{address.color}</p>
+                        <p className="line">{address.color}</p>
                       </React.Fragment>
                     }
-              <div ref={ this.mapContainer } className={ classes.map }/>
-              <button class='ui primary button' role='button' onClick={this.printDiv} className={classes.button}>
+              <div ref={ this.mapContainer } className="map"/>
+              <button className='ui primary button' role='button' onClick={this.printDiv}>
                 Imprimir
               </button>
             </Modal.Content>
@@ -167,4 +163,4 @@ class OrderDetailModal extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(OrderDetailModal))
+export default connect(mapStateToProps, mapDispatchToProps)(OrderDetailModal)

@@ -22,6 +22,7 @@
     "moment": "^2.22.1",
     "react": "^16.2.0",
     "react-cropper": "^1.0.1",
+    "react-fuzzy-filter": "^4.0.0",
     "react-dom": "^16.2.0",
     "react-particles-js": "^2.1.2",
     "react-redux": "^5.0.6",

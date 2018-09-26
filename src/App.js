@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import 'mapbox-gl/dist/mapbox-gl.css';
+
 // Pages
 import Home from './pages/Home';
 import Menus from './pages/Menus';
@@ -71,7 +72,6 @@ class App extends Component {
   };
 
   render() {
-    console.log(checkAuth());
     return (
       <div className='App'>
         <ConnectedSwitch>
