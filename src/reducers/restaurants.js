@@ -5,6 +5,7 @@ import axios from '../helpers/axios';
 
 export const HANDLE_RESTAURANT_INPUT = createAction('HANDLE_RESTAURANT_INPUT');
 export const HANDLE_RESTAURANT_LOADER = createAction('HANDLE_RESTAURANT_LOADER');
+export const GET_RESTAURANT = createAction('GET_RESTAURANT');
 
 export const initialState = I.from({
   create     : {
@@ -23,6 +24,7 @@ export const initialState = I.from({
   menus      : [],
   loader     : false,
   restaurant : {},
+  isOpen     : true,
 });
 
 export function createRestaurant (bocaId) {
@@ -36,14 +38,25 @@ export function createRestaurant (bocaId) {
   }
 }
 
-export function getRestaurant () {
+export function handleStoreChange (value) {
   return async (dispatch, getState) => {
     try {
       const { reducers : { restaurants : { create } } } = getState();
-      const { data } = await axios.get('restaurant');
-      console.log(data);
+      const { data } = await axios.post('restaurant/handleStore', create);
     } catch (e) {
       console.log(e);
+    }
+  }
+}
+
+export function getRestaurant () {
+  return async (dispatch, getState) => {
+    try {
+      const { reducers : { auth : { currentUser } } } = getState();
+      const { data: { restaurant } } = await axios.get(`restaurant/${currentUser._id}`);
+      dispatch(GET_RESTAURANT(restaurant));
+    } catch (e) {
+      console.log('error', e);
     }
   }
 }
@@ -69,4 +82,8 @@ export default handleActions({
   HANDLE_RESTAURANT_LOADER : (state) => {
     return I.set(state, 'loader', !state.loader);
   },
+  GET_RESTAURANT: (state, action) => {
+    const { description, domain, isOpen, name } = action.payload;
+    return I.merge(state, { restaurant: { description, domain, isOpen, name } });
+  }
 }, initialState)

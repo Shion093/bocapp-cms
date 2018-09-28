@@ -60,7 +60,7 @@ class Restaurants extends Component {
     const { reducers : { orders : { orders, orderStates } } } = this.props;
     return (
       <div className='Restaurants'>
-        <Button basic color='green' onClick={this.openModal('restaurantModal')}>Crear</Button>
+        <Button basic color='green' onClick={this.openModal('restaurantModal')}>Crear Tienda</Button>
         <RestaurantModal />
       </div>
     )
