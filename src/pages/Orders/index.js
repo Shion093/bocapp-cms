@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Dropdown, Table, Input } from 'semantic-ui-react';
+import { Dropdown, Table, Input, Button } from 'semantic-ui-react';
 import _ from 'lodash';
 import 'moment/locale/es';
 import fuzzyFilterFactory from 'react-fuzzy-filter';
@@ -57,16 +57,15 @@ class Orders extends Component {
     };
     return (
       <div className='Orders'>
-        <div></div>
         <Table celled>
           <Table.Header>
             <Table.Row>
               <Table.Cell>
                 <Table.HeaderCell>
                   <InputFilter debounceTime={ 200 } className="input-filter" inputProps={ { placeholder: "Buscar orden..." } } />
-                  <button className='ui icon button' role='button' onClick={() => this.props.actions.getAllOrders()}>
+                  <Button role='button' onClick={this.props.actions.getAllOrders}>
                     Refrescar ordenes <i aria-hidden='true' className='refresh icon' />
-                  </button>
+                  </Button>
                 </Table.HeaderCell>
                 
               </Table.Cell>
@@ -87,7 +86,7 @@ class Orders extends Component {
               (filteredOrders) => {
                 if (filteredOrders.length === 0) {
                   return (
-                    <h3 className="no-found">No se encontraron ordenes</h3>
+                    <Table.Body className="no-found">No se encontraron ordenes</Table.Body>
                   );
                 }
                 return (
