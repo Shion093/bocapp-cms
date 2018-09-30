@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Modal, Transition, Table, Header, Image, Button, Grid } from 'semantic-ui-react';
+import { Modal, Transition, Table, Header, Image, Button } from 'semantic-ui-react';
 import _ from 'lodash';
 import mapboxgl from 'mapbox-gl';
 import ReactToPrint from 'react-to-print';
-import JSpdf from 'jspdf';
-import 'jspdf-autotable';
 
 import './styles.css';
 
@@ -23,7 +21,6 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmb
 function mapStateToProps(state) {
   return state;
 }
-
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -42,7 +39,6 @@ class OrderDetailModal extends Component {
     super(props);
 
     this.map = null;
-    this.geoLocation = null;
     this.mapContainer = React.createRef();
     this.invoice = React.createRef();
 
@@ -52,13 +48,6 @@ class OrderDetailModal extends Component {
     }
 
   }
-
-  addMarker = (e) => {
-    const { lngLat } = e;
-    new mapboxgl.Marker()
-      .setLngLat([lngLat.lng, lngLat.lat])
-      .addTo(this.map);
-  };
 
   mountMap = () => {
     const { selectedOrder : { location : { coordinates } } } = this.props.reducers.orders;
@@ -137,11 +126,7 @@ class OrderDetailModal extends Component {
                 </Table.Body>
               </Table>
 
-              {/*<Button primary onClick={this.printDiv}>Imprimir</Button>*/}
-
               <Invoice selectedOrder={this.props.reducers.orders.selectedOrder} invRef={this.invoice} />
-
-
 
               <ReactToPrint
                 bodyClass={'OrderModal'}

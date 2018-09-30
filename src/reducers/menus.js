@@ -60,7 +60,7 @@ export function createMenu (blob) {
 export function updateMenu (blob) {
   return async (dispatch, getState) => {
     try {
-      const { reducers : { menus : { edit, menus } } } = getState();
+      const { reducers : { menus : { edit } } } = getState();
       const form = new FormData();
       const { description, name, _id, picture } = edit;
       form.append('description', description);

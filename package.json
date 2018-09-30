@@ -16,8 +16,6 @@
     "@mapbox/mapbox-gl-geocoder": "^2.3.0",
     "axios": "^0.17.1",
     "history": "^4.7.2",
-    "jspdf": "^1.4.1",
-    "jspdf-autotable": "^2.3.5",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
     "mapbox-gl": "^0.48.0",

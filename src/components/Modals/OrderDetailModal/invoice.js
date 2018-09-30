@@ -40,9 +40,9 @@ class Invoice extends Component {
                 <div><h2>Precio</h2></div>
               </div>
               {
-                _.map(products, ({ name, qty, price }) => {
+                _.map(products, ({ name, qty, price }, i) => {
                   return (
-                    <div className="invoiceItem">
+                    <div className="invoiceItem" key={i}>
                       <p className="product itemText">{name}</p>
                       <p className="itemText">{qty}</p>
                       <p className="itemText">&#8353;{price}</p>

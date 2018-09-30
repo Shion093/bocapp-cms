@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 // Pages
 import Home from './pages/Home';

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Menu, Input } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react'
 
 // Reducers
 import { handleLogout } from '../../reducers/auth';
