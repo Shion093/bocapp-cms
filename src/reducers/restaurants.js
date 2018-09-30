@@ -1,11 +1,7 @@
 import I from 'seamless-immutable';
 import { createAction, handleActions } from 'redux-actions';
-import _ from 'lodash';
 
 import axios from '../helpers/axios';
-
-import { HANDLE_MODAL } from './modals';
-import { MENU_SELECTED, CLEAR_SELECTED_MENU, BOCA_GET_ALL } from './bocas';
 
 export const HANDLE_RESTAURANT_INPUT = createAction('HANDLE_RESTAURANT_INPUT');
 export const HANDLE_RESTAURANT_LOADER = createAction('HANDLE_RESTAURANT_LOADER');
@@ -34,6 +30,7 @@ export function createRestaurant (bocaId) {
     try {
       const { reducers : { restaurants : { create } } } = getState();
       const { data } = await axios.post('restaurant/create', create);
+      console.log(data);
     } catch (e) {
       console.log(e);
     }
@@ -43,7 +40,6 @@ export function createRestaurant (bocaId) {
 export function getRestaurant () {
   return async (dispatch, getState) => {
     try {
-      const { reducers : { restaurants : { create } } } = getState();
       const { data } = await axios.get('restaurant');
       console.log(data);
     } catch (e) {

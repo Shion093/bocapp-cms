@@ -2,17 +2,19 @@ import React, { Component } from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Modal, Transition, Table, Header, Image } from 'semantic-ui-react';
+import { Modal, Transition, Table, Header, Image, Button } from 'semantic-ui-react';
 import _ from 'lodash';
 import mapboxgl from 'mapbox-gl';
-import { withStyles } from '@material-ui/core';
+import ReactToPrint from 'react-to-print';
 
-import styles from './styles';
+import './styles.css';
 
 // Reducers
 import { handleModal } from '../../../reducers/modals';
 import { handleMenuInputs, createMenu, handleMenuLoader } from '../../../reducers/menus';
 import { formatPrice } from '../../../helpers/formats';
+
+import Invoice from './invoice';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
@@ -32,17 +34,13 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-type Props = {
-  clasess : Object,
-}
-
-class OrderDetailModal extends Component<Props> {
-  constructor (props) {
+class OrderDetailModal extends Component {
+  constructor(props) {
     super(props);
 
     this.map = null;
-    this.geoLocation = null;
     this.mapContainer = React.createRef();
+    this.invoice = React.createRef();
 
     this.state = {
       marker      : null,
@@ -51,15 +49,7 @@ class OrderDetailModal extends Component<Props> {
 
   }
 
-  addMarker = (e) => {
-    const { lngLat } = e;
-    console.log('esta aqui la vara', e);
-    new mapboxgl.Marker()
-      .setLngLat([lngLat.lng, lngLat.lat])
-      .addTo(this.map);
-  };
-
-  mountMap () {
+  mountMap = () => {
     const { selectedOrder : { location : { coordinates } } } = this.props.reducers.orders;
     this.map = new mapboxgl.Map({
       container : this.mapContainer.current,
@@ -67,98 +57,85 @@ class OrderDetailModal extends Component<Props> {
       center    : [coordinates[1], coordinates[0]],
       zoom      : 15,
     });
-  
+
     this.map.on('load', () => {
       new mapboxgl.Marker()
-      .setLngLat([coordinates[1], coordinates[0]])
-      .addTo(this.map);
+        .setLngLat([coordinates[1], coordinates[0]])
+        .addTo(this.map);
     });
+  };
 
-  }
-
-  componentDidUpdate (prevProps) {
-    if (prevProps.reducers.modals.orderDetailModal !== this.props.reducers.modals.orderDetailModal && this.props.reducers.modals.orderDetailModal) {
-      setTimeout(() => {
-        if(this.mapContainer.current) {
-          this.mountMap();
-        }
-      }, 500);
-    }
+  componentDidMount () {
+    setTimeout(this.mountMap, 1000)
   }
 
   closeModal = () => {
-
     this.props.actions.handleModal('orderDetailModal');
   };
 
-  printDiv = () => {
-    const { selectedOrder : { orderNumber, products, address, total } } = this.props.reducers.orders;
-    var mywindow = window.open('', 'PRINT', 'height=400,width=600');
-
-    mywindow.document.write('<html><head><title></title>');
-    mywindow.document.write('</head><body>');
-    mywindow.document.write(`<h2>Orden: #${orderNumber}</h2>`);
-    _.map(products, (product, index) => {
-      return  mywindow.document.write(`<p className={ classes.line } key={index}>${product.qty} - ${product.name}</p>`);
-    });
-    mywindow.document.write(`<p className={ classes.line } key={index}>Total: ${formatPrice(total || 0)}</p>`);
-    mywindow.document.write('</body></html>');
-
-    mywindow.document.close();
-    mywindow.focus();
-
-    mywindow.print();
-    mywindow.close();
-    this.closeModal();
-    return true;
-  }
-  
   render() {
-    const { classes } = this.props;
     const { orderDetailModal } = this.props.reducers.modals;
     const { selectedOrder : { orderNumber, products, address, total } } = this.props.reducers.orders;
     return (
-      <div className='MenuModal' className={ classes.ordenModal }>
-        <Transition animation='fade up' duration={ 600 } visible={ orderDetailModal }>
+      <div>
+        <Invoice selectedOrder={this.props.reducers.orders.selectedOrder} invRef={this.invoice} />
+        <Transition animation='fade up' duration={600} visible={orderDetailModal}>
           <Modal
             closeIcon
-            size="tiny"
-            open={ orderDetailModal }
-            onClose={ this.closeModal }>
+            open={orderDetailModal}
+            className="OrderModal"
+            onClose={this.closeModal}>
             <Modal.Header>
-              Detalles del pedido
+              Detalles del pedido {orderNumber}
             </Modal.Header>
-            <Modal.Content className={ classes.billContainer }>
-              <div className={ classes.billContainer } >
-                <p className={ classes.line }>Orden #{orderNumber}</p>
-                  <p className={ classes.line }>-----------------------</p>
-                  {
-                    _.map(products, (product, index) => {
-                      return (
+            <Modal.Content className="bill-container">
+              <div ref={this.mapContainer} className="map" />
+              <Table basic='very' celled collapsing>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Cantidad</Table.HeaderCell>
+                    <Table.HeaderCell>Nombre</Table.HeaderCell>
+                    <Table.HeaderCell>Precio</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
 
-                        <p className={ classes.line } key={index}>{product.qty}-{product.name}</p>
-                      );
+                <Table.Body>
+                  {
+                    _.map(products, (product) => {
+                      return (
+                        <Table.Row key={product._id}>
+                          <Table.Cell>
+                            <Header as='h4' image>
+                              <Image src={product.picture} rounded size='mini'/>
+                              <Header.Content>
+                                {product.qty}
+                              </Header.Content>
+                            </Header>
+                          </Table.Cell>
+                          <Table.Cell>
+                            {product.name}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {formatPrice(product.price)}
+                          </Table.Cell>
+                        </Table.Row>
+                      )
                     })
                   }
-                  <p className={ classes.line }>-----------------------</p>
-                  <p className={ classes.line }>Total: {formatPrice(total || 0)}</p>
-                  <p className={ classes.line }>-----------------------</p>
-                  </div>
-                    {
-                      address &&
-                      <React.Fragment>
-                        <p className={ classes.line }>Dirección</p>
-                        <p className={ classes.line } >{address.address}</p>
-                        <label>Referencias</label>
-                        <p>{address.references}</p>
-                        <label>Local o casa color</label>
-                        <p>{address.color}</p>
-                      </React.Fragment>
-                    }
-              <div ref={ this.mapContainer } className={ classes.map }/>
-              <button class='ui primary button' role='button' onClick={this.printDiv} className={classes.button}>
-                Imprimir
-              </button>
+
+                </Table.Body>
+              </Table>
+
+              <Invoice selectedOrder={this.props.reducers.orders.selectedOrder} invRef={this.invoice} />
+
+              <ReactToPrint
+                bodyClass={'OrderModal'}
+                trigger={() =>  <Button primary>
+                  Imprimir
+                </Button>}
+                content={() => this.invoice.current}
+              />
+
             </Modal.Content>
           </Modal>
         </Transition>
@@ -167,4 +144,4 @@ class OrderDetailModal extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(OrderDetailModal))
+export default connect(mapStateToProps, mapDispatchToProps)(OrderDetailModal)

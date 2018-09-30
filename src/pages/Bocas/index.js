@@ -4,6 +4,7 @@ import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { Button, Grid, Icon, Item, Dropdown } from 'semantic-ui-react';
 import _ from 'lodash';
+import fuzzyFilterFactory from 'react-fuzzy-filter';
 
 import './styles.css';
 
@@ -64,6 +65,11 @@ class Bocas extends Component {
 
   render () {
     const { bocas : { bocas, selectedMenu } } = this.props.reducers;
+    const { InputFilter, FilterResults } = fuzzyFilterFactory();
+    const fuseConfig = {
+      keys: ['name', 'description', 'price'],
+      threshold: 0.3,
+    };
     return (
       <div className='Bocas'>
         <BocaModal/>
@@ -71,13 +77,16 @@ class Bocas extends Component {
         <Grid columns={2} doubling className='dropDownMenus' padded>
           <Grid.Row>
             <Grid.Column floated='left' width={3}>
-              <Button fluid positive onClick={this.openModal('createBocaModal')}>Crear Nueva Boca</Button>
+              <InputFilter debounceTime={ 200 } className="input-filter" inputProps={ { placeholder: "Buscar producto..." } } />
+            </Grid.Column>
+            <Grid.Column floated='left' width={3}>
+              <Button fluid positive onClick={this.openModal('createBocaModal')}>Crear nuevo producto</Button>
             </Grid.Column>
             <Grid.Column>
               <Dropdown { ...{
                 onChange    : this.dropDownChange,
                 options     : this.getOptions(),
-                placeholder : 'Seleccione Menu',
+                placeholder : 'Seleccione categoría',
                 fluid       : true,
                 search      : true,
                 selection   : true,
@@ -89,35 +98,50 @@ class Bocas extends Component {
         <Grid columns={2} doubling>
           <Grid.Row>
             <Grid.Column className='column-scroll'>
-              <Item.Group divided className='available'>
-                {
-                  _.map(bocas, (boca) => {
-                    const { _id, name, picture, description, price } = boca;
-                    return (
-                      <Item className='boca-item' key={_id}>
-                        <Item.Image src={picture} />
-                        <Item.Content floated='left'>
-                          <Item.Header>{name}</Item.Header>
-                          <Item.Meta>
-                            <span className='cinema'>Precio : ₡{price}</span>
-                          </Item.Meta>
-                          <Item.Description>{description}</Item.Description>
-                          <Item.Extra>
-                            <Button primary floated='right' onClick={this.handleBocaAssign(_id)}>
-                              Añadir al Menú
-                              <Icon name='right chevron' />
-                            </Button>
-                            <Button primary floated='right' onClick={this.openModal('editBocaModal', boca)}>
-                              Editar
-                              <Icon name='right chevron' />
-                            </Button>
-                          </Item.Extra>
-                        </Item.Content>
-                      </Item>
-                    )
-                  })
+            <FilterResults { ...{
+              fuseConfig,
+              items: bocas,
+            } }>
+              {
+              (filteredBocas) => {
+                if (filteredBocas.length === 0) {
+                  return (
+                    <h3 className="no-found">No se encontraron productos</h3>
+                  );
                 }
-              </Item.Group>
+                return (
+                  <Item.Group divided className='available'>
+                    {
+                      _.map(filteredBocas, (boca) => {
+                        const { _id, name, picture, description, price } = boca;
+                        return (
+                          <Item className='boca-item' key={_id}>
+                            <Item.Image src={picture} />
+                            <Item.Content floated='left'>
+                              <Item.Header>{name}</Item.Header>
+                              <Item.Meta>
+                                <span className='cinema'>Precio : ₡{price}</span>
+                              </Item.Meta>
+                              <Item.Description>{description}</Item.Description>
+                              <Item.Extra>
+                                <Button primary floated='right' onClick={this.handleBocaAssign(_id)}>
+                                  Añadir a la categoría
+                                  <Icon name='right chevron' />
+                                </Button>
+                                <Button primary floated='right' onClick={this.openModal('editBocaModal', boca)}>
+                                  Editar
+                                  <Icon name='right chevron' />
+                                </Button>
+                              </Item.Extra>
+                            </Item.Content>
+                          </Item>
+                        )
+                      })
+                    }
+                  </Item.Group>
+                );}
+              }
+            </FilterResults>
             </Grid.Column>
             <Grid.Column className='column-scroll'>
               <Item.Group divided className='available'>

@@ -3,8 +3,7 @@ import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Button, Dropdown, Table } from 'semantic-ui-react';
-import _ from 'lodash';
+import { Button } from 'semantic-ui-react';
 import 'moment/locale/es';
 
 // Components
@@ -15,8 +14,6 @@ import { getAllOrders, selectOrder, changeOrderStatus } from '../../reducers/ord
 import { handleModal } from '../../reducers/modals';
 
 import './styles.css';
-import { formatPrice } from '../../helpers/formats';
-
 
 moment.locale('es');
 
@@ -57,7 +54,6 @@ class Restaurants extends Component {
   };
 
   render() {
-    const { reducers : { orders : { orders, orderStates } } } = this.props;
     return (
       <div className='Restaurants'>
         <Button basic color='green' onClick={this.openModal('restaurantModal')}>Crear</Button>
