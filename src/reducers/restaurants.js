@@ -30,6 +30,7 @@ export function createRestaurant (bocaId) {
     try {
       const { reducers : { restaurants : { create } } } = getState();
       const { data } = await axios.post('restaurant/create', create);
+      console.log(data);
     } catch (e) {
       console.log(e);
     }
@@ -39,7 +40,6 @@ export function createRestaurant (bocaId) {
 export function getRestaurant () {
   return async (dispatch, getState) => {
     try {
-      const { reducers : { restaurants : { create } } } = getState();
       const { data } = await axios.get('restaurant');
       console.log(data);
     } catch (e) {
