@@ -15,6 +15,7 @@ import { handleMenuInputs, createMenu, handleMenuLoader } from '../../../reducer
 import { formatPrice } from '../../../helpers/formats';
 
 import Invoice from './invoice';
+import InvoiceDelivery from './invoiceDelivery';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
@@ -41,6 +42,7 @@ class OrderDetailModal extends Component {
     this.map = null;
     this.mapContainer = React.createRef();
     this.invoice = React.createRef();
+    this.invoiceDelivery = React.createRef();
 
     this.state = {
       marker      : null,
@@ -127,13 +129,21 @@ class OrderDetailModal extends Component {
               </Table>
 
               <Invoice selectedOrder={this.props.reducers.orders.selectedOrder} invRef={this.invoice} />
+              <InvoiceDelivery selectedOrder={this.props.reducers.orders.selectedOrder} invRef={this.invoiceDelivery} />
 
               <ReactToPrint
                 bodyClass={'OrderModal'}
                 trigger={() =>  <Button primary>
-                  Imprimir
+                  Imprimir Cliente
                 </Button>}
                 content={() => this.invoice.current}
+              />
+              <ReactToPrint
+                bodyClass={'OrderModal'}
+                trigger={() =>  <Button primary>
+                  Imprimir Repartidor
+                </Button>}
+                content={() => this.invoiceDelivery.current}
               />
 
             </Modal.Content>

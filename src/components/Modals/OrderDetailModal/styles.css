@@ -5,6 +5,9 @@
 .OrderModal .invoice {
   display: none;
 }
+.OrderModal .invoiceDelivery {
+  display: none;
+}
 .OrderModal .invoiceCont {
   padding: 2mm;
   width: 44mm;
@@ -28,6 +31,10 @@
   font-size: .7em;
   color: #666;
   line-height: 1.2em;
+}
+.OrderModal .invoiceCont .qr {
+  display: flex;
+  justify-content: center;
 }
 .OrderModal .invoiceCont .info {
   text-align: center;
