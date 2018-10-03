@@ -2,6 +2,17 @@
   width: 100%;
   height: 300px;
 }
+.OrderModal .product-name-image {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.OrderModal .product-name-image img {
+  margin-right: 15px;
+}
+.OrderModal .client-info-cont {
+  padding-top: 20px;
+}
 .OrderModal .invoice {
   display: none;
 }

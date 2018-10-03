@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Modal, Transition, Table, Header, Image, Button } from 'semantic-ui-react';
+import { Modal, Transition, Table, Header, Image, Button, Grid, Segment, Card, Label, List } from 'semantic-ui-react';
 import _ from 'lodash';
 import mapboxgl from 'mapbox-gl';
 import ReactToPrint from 'react-to-print';
@@ -16,6 +16,7 @@ import { formatPrice } from '../../../helpers/formats';
 
 import Invoice from './invoice';
 import InvoiceDelivery from './invoiceDelivery';
+import moment from 'moment';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
@@ -77,7 +78,8 @@ class OrderDetailModal extends Component {
 
   render() {
     const { orderDetailModal } = this.props.reducers.modals;
-    const { selectedOrder : { orderNumber, products, address, total } } = this.props.reducers.orders;
+    const { selectedOrder : { orderNumber, products, address, total, subTotal, createdAt, user, details } } = this.props.reducers.orders;
+    const date = moment(createdAt).format('MMMM Do YYYY, h:mm:ss a');
     return (
       <div>
         <Invoice selectedOrder={this.props.reducers.orders.selectedOrder} invRef={this.invoice} />
@@ -92,41 +94,102 @@ class OrderDetailModal extends Component {
             </Modal.Header>
             <Modal.Content className="bill-container">
               <div ref={this.mapContainer} className="map" />
-              <Table basic='very' celled collapsing>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Cantidad</Table.HeaderCell>
-                    <Table.HeaderCell>Nombre</Table.HeaderCell>
-                    <Table.HeaderCell>Precio</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
 
-                <Table.Body>
-                  {
-                    _.map(products, (product) => {
-                      return (
-                        <Table.Row key={product._id}>
-                          <Table.Cell>
-                            <Header as='h4' image>
-                              <Image src={product.picture} rounded size='mini'/>
-                              <Header.Content>
-                                {product.qty}
-                              </Header.Content>
-                            </Header>
-                          </Table.Cell>
-                          <Table.Cell>
+              <div className='client-info-cont'>
+                <Segment raised>
+                  <Label as='a' color='blue' ribbon>
+                    Detalles
+                  </Label>
+
+                  <List divided selection>
+                    <List.Item>
+                      <Label horizontal>Fecha</Label>
+                      {date}
+                    </List.Item>
+                    <List.Item>
+                      <Label horizontal>Cliente</Label>
+                      {user.firstName} {user.lastName}
+                    </List.Item>
+                    <List.Item>
+                      <Label horizontal>Email</Label>
+                      {user.email}
+                    </List.Item>
+                    <List.Item>
+                      <Label horizontal>Telefono</Label>
+                      {user.phoneNumber}
+                    </List.Item>
+                    <List.Item>
+                      <Label horizontal>Numero de Orden</Label>
+                      {orderNumber}
+                    </List.Item>
+                    <List.Item>
+                      <Label horizontal>Detalles</Label>
+                      {details}
+                    </List.Item>
+                    <List.Item>
+                      <Label horizontal>Direccion</Label>
+                      {address}
+                    </List.Item>
+                  </List>
+                </Segment>
+              </div>
+
+              <Segment raised>
+                <Label as='a' color='blue' ribbon>
+                  Productos
+                </Label>
+              <Grid padded divided='vertically' columns='equal' textAlign='right'>
+                <Grid.Row>
+                  <Grid.Column width={6}>
+                    <Label attached='top right'>Producto</Label>
+                  </Grid.Column>
+                  <Grid.Column width={2}>
+                    <Label attached='top right'>Cantidad</Label>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Label attached='top right'>Precio</Label>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Label attached='top right'>Total</Label>
+                  </Grid.Column>
+                </Grid.Row>
+                {
+                  _.map(products, (product) => {
+                    return (
+                      <Grid.Row key={product._id}>
+                        <Grid.Column width={6}>
+                          <div className='product-name-image'>
+                            <Image src={product.picture} rounded size='mini'/>
                             {product.name}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {formatPrice(product.price)}
-                          </Table.Cell>
-                        </Table.Row>
-                      )
-                    })
-                  }
+                          </div>
+                        </Grid.Column>
+                        <Grid.Column width={2}>
+                          {product.qty}
+                        </Grid.Column>
+                        <Grid.Column>
+                          {formatPrice(product.price)}
+                        </Grid.Column>
+                        <Grid.Column>
+                          {formatPrice(product.price * product.qty)}
+                        </Grid.Column>
+                      </Grid.Row>
+                    )
+                  })
+                }
+              </Grid>
+              </Segment>
 
-                </Table.Body>
-              </Table>
+              <Segment raised>
+                <Label as='a' color='blue' ribbon>
+                  Totales
+                </Label>
+
+                <List divided selection>
+                  <List.Item>
+                    <Label horizontal size='huge'>Total: {formatPrice(total)}</Label>
+                  </List.Item>
+                </List>
+              </Segment>
 
               <Invoice selectedOrder={this.props.reducers.orders.selectedOrder} invRef={this.invoice} />
               <InvoiceDelivery selectedOrder={this.props.reducers.orders.selectedOrder} invRef={this.invoiceDelivery} />
