@@ -20,6 +20,7 @@
     "lodash": "^4.17.4",
     "mapbox-gl": "^0.48.0",
     "moment": "^2.22.1",
+    "qrcode.react": "^0.8.0",
     "react": "^16.2.0",
     "react-cropper": "^1.0.1",
     "react-dom": "^16.2.0",
