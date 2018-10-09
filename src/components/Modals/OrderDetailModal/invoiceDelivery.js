@@ -38,8 +38,12 @@ class InvoiceDelivery extends Component {
           </div>
 
           <div className="invoiceItem invoiceTitle">
-            <div style={{ flexGrow: 8}}><h2>Producto</h2></div>
-            <div style={{ flexGrow: 4}} className="centerText"><h2>Cantidad</h2></div>
+            <div style={{ flexGrow: 8}}>
+              <h2>Producto</h2>
+            </div>
+            <div style={{ flexGrow: 4}} className="centerText">
+              <h2>Cantidad</h2>
+            </div>
           </div>
           {
             _.map(products, ({ name, qty, price }, i) => {
@@ -52,8 +56,12 @@ class InvoiceDelivery extends Component {
             })
           }
           <div className="invoiceItem invoiceTitle">
-            <div style={{ flexGrow: 8}} className="endText"><h2>Total</h2></div>
-            <div style={{ flexGrow: 4}} className="centerText"><h2>&#8353;{total}</h2></div>
+            <div style={{ flexGrow: 8}} className="endText">
+              <h2>Total</h2>
+            </div>
+            <div style={{ flexGrow: 4}} className="centerText">
+              <h2>&#8353;{total}</h2>
+            </div>
           </div>
         </div>
       </div>

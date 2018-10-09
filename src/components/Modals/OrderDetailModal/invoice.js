@@ -23,11 +23,13 @@ class Invoice extends Component {
             <p><b>Cliente:</b> {user.firstName} {user.lastName}</p>
           </div>
           <div className="invoiceItem invoiceTitle">
-            <div style={{ flexGrow: 8}}>
-              <h2>Producto</h2></div>
-            <div style={{ flexGrow: 2}} className="centerText">
-              <h2>Cant</h2></div>
-            <div style={{ flexGrow: 2}} className="centerText">
+            <div style={{ flexGrow : 8 }}>
+              <h2>Producto</h2>
+            </div>
+            <div style={{ flexGrow : 2 }} className="centerText">
+              <h2>Cant</h2>
+            </div>
+            <div style={{ flexGrow : 2 }} className="centerText">
               <h2>Precio</h2>
             </div>
           </div>
