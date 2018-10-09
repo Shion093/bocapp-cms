@@ -40,7 +40,7 @@ class LoginForm extends Component {
         <Grid.Column style={ { maxWidth : 450, width : 450 } }>
           <Header as='h2' color='teal' textAlign='center'>
             { /*<Image src='/logo.png' />*/ }
-            BocaApp
+            Tavuel506sc
           </Header>
           <Form size='large' onSubmit={ this.login }>
             <Segment stacked>

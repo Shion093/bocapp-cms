@@ -1,30 +1,79 @@
-.OrderModal .bill-container {
-  width: 400px;
-  align-content: center;
-  margin: 0 auto;
-  text-align: center;
-}
-.OrderModal .bill-container .line {
-  background: white;
-  width: 400px;
-  font-family: 13pt Georgia, "Times New Roman", Times, serif;
-  white-space: 'pre-line';
-  font-size: 20px;
-  margin: 0;
-  padding: 0;
-  border: none;
-  font-weight: 600;
-  color: black;
-  font: 13pt Georgia, "Times New Roman", Times, serif;
-  line-height: '1.3';
-}
 .OrderModal .map {
   width: 100%;
   height: 300px;
-  width: 400px;
-  align-content: center;
-  margin: '0 auto';
 }
-.OrderModal .map .mapboxgl-canvas {
-  position: relative !important;
+.OrderModal .invoice {
+  display: none;
+}
+.OrderModal .invoiceCont {
+  padding: 2mm;
+  width: 44mm;
+  background: #FFF;
+  display: flex;
+  flex-direction: column;
+}
+.OrderModal .invoiceCont h1 {
+  font-size: 1.5em;
+  color: #222;
+}
+.OrderModal .invoiceCont h2 {
+  font-size: .9em;
+}
+.OrderModal .invoiceCont h3 {
+  font-size: 1.2em;
+  font-weight: 300;
+  line-height: 2em;
+}
+.OrderModal .invoiceCont p {
+  font-size: .7em;
+  color: #666;
+  line-height: 1.2em;
+}
+.OrderModal .invoiceCont .info {
+  text-align: center;
+}
+.OrderModal .invoiceCont .info p {
+  text-align: left;
+  margin: 0;
+}
+.OrderModal .invoiceCont .invoiceDetails {
+  padding: 20px 0;
+}
+.OrderModal .invoiceCont .invoiceDetails p {
+  text-align: left;
+  margin: 0;
+}
+.OrderModal .invoiceCont .itemText {
+  font-size: .5em;
+  line-height: 1.2em;
+  margin: 0;
+  padding: 2px 0;
+}
+.OrderModal .invoiceCont .logo {
+  height: 60px;
+  width: 60px;
+  background: url(https://s3.amazonaws.com/lo-que-sea/assets/logo.png) no-repeat;
+  background-size: 60px 60px;
+  margin: 0 auto;
+}
+.OrderModal .invoiceCont .invoiceContent {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #EEE;
+}
+.OrderModal .invoiceCont .invoiceTitle {
+  background: #EEE;
+  font-size: .5em;
+}
+.OrderModal .invoiceCont .product {
+  width: 15mm;
+}
+.OrderModal .invoiceCont .invoiceItem {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #EEE;
+}
+.OrderModal .invoiceCont .legalCopy {
+  margin-top: 5mm;
+  text-align: center;
 }

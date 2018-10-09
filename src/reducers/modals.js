@@ -3,18 +3,18 @@ import { createAction, handleActions } from 'redux-actions';
 
 // Actions
 import { SELECT_MENU } from './menus';
-import { SELECT_BOCA } from './bocas';
+import { SELECT_PRODUCT } from './products';
 
 export const HANDLE_MODAL = createAction('HANDLE_MODAL');
 
 export const initialState = I.from({
-  createMenuModal  : false,
-  createBocaModal  : false,
-  orderDetailModal : false,
-  editMenuModal    : false,
-  editBocaModal    : false,
-  confirmModal     : false,
-  restaurantModal  : false,
+  createMenuModal     : false,
+  createProductModal  : false,
+  orderDetailModal    : false,
+  editMenuModal       : false,
+  editProducModal     : false,
+  confirmModal        : false,
+  storeModal          : false,
 });
 
 export function handleModal (modal, data, type) {
@@ -24,8 +24,8 @@ export function handleModal (modal, data, type) {
       if (type === 'menu') {
         dispatch(SELECT_MENU(data))
       }
-      if (type === 'boca') {
-        dispatch(SELECT_BOCA(data))
+      if (type === 'product') {
+        dispatch(SELECT_PRODUCT(data))
       }
     }
   }

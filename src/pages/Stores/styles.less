@@ -1,4 +1,6 @@
-.Bocas {
+.Stores {
+  height : calc(~"100vh - 47px");
+  overflow-y: auto;
   .add-icon {
     height          : 185px;
     display         : flex;
@@ -19,11 +21,6 @@
     outline: none;
   }
 
-  .search-content {
-    display: inline-flex
-  }
-
-
   .ui.card:first-child {
     margin-top    : 20px !important;
     margin-bottom : 20px !important;
@@ -32,15 +29,16 @@
   .ui.card > .image {
     height : 185px;
   }
+  .selected {
+    overflow-y : scroll;
+    height     : 100%;
+  }
   .available {
     overflow-y : scroll;
     height     : 100%;
   }
-  .column-scroll {
-    height : calc(~"100vh - 150px");
-  }
-  .boca-item {
-    padding: 10px 20px !important;
+  .column-scroll2 {
+    height : calc(~"100vh - 47px");
   }
 }
 

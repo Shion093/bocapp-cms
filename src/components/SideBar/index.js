@@ -32,9 +32,9 @@ class SideBar extends Component {
             <Icon name='food'/>
             Menus
           </Menu.Item>
-          <Menu.Item name='bocas' onClick={ this.goToPage('/bocas') }>
+          <Menu.Item name='products' onClick={ this.goToPage('/products') }>
             <Icon name='coffee'/>
-            Bocas
+            Productos
           </Menu.Item>
           <Menu.Item name='ordenes' onClick={ this.goToPage('/ordenes') }>
             <Icon name='cart'/>
@@ -42,9 +42,9 @@ class SideBar extends Component {
           </Menu.Item>
           {
             currentUser.role === 'superAdmin' &&
-            <Menu.Item name='restaurantes' onClick={ this.goToPage('/restaurantes') }>
+            <Menu.Item name='stores' onClick={ this.goToPage('/stores') }>
               <Icon name='factory'/>
-              Restaurantes
+              Tiendas
             </Menu.Item>
           }
         </Menu>

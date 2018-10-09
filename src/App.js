@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 // Pages
 import Home from './pages/Home';
 import Menus from './pages/Menus';
-import Bocas from './pages/Bocas';
+import Products from './pages/Products';
 import Orders from './pages/Orders';
 import Login from './pages/Login';
-import Restaurants from './pages/Restaurants';
+import Stores from './pages/Stores';
 
 // Components
 import SideBar from './components/SideBar';
@@ -44,11 +44,11 @@ class App extends Component {
         <main className='Main'>
           <ConnectedRoute exact path='/' component={ Home }/>
           <ConnectedRoute exact path='/menus' component={ Menus }/>
-          <ConnectedRoute exact path='/bocas' component={ Bocas }/>
+          <ConnectedRoute exact path='/products' component={ Products }/>
           <ConnectedRoute exact path='/ordenes' component={ Orders }/>
-          <ConnectedRoute exact path='/restaurantes' render={
+          <ConnectedRoute exact path='/stores' render={
             props => currentUser.role === 'superAdmin'
-              ? <Restaurants/>
+              ? <Stores/>
               : <Redirect to={ {
                 pathname : '/',
                 state    : { from : props.location }

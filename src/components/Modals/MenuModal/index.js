@@ -31,7 +31,6 @@ class MenuModal extends Component {
   render() {
     const { createMenuModal } = this.props.reducers.modals;
     const { create : { name, description, picture }, loader } = this.props.reducers.menus;
-    console.log(this.state);
     return (
       <div className='MenuModal'>
         <Transition animation='fade up' duration={ 600 } visible={ createMenuModal }>
@@ -40,7 +39,7 @@ class MenuModal extends Component {
             open={ createMenuModal }
             onClose={ this.closeModal }>
             <Modal.Header>
-              Crear Menu Nuevo
+              Nueva categoria
             </Modal.Header>
             <Modal.Content>
               <Form onSubmit={ this.handleSubmit } loading={loader}>

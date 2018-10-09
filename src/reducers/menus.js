@@ -5,7 +5,7 @@ import _ from 'lodash';
 import axios from '../helpers/axios';
 
 import { HANDLE_MODAL } from './modals';
-import { MENU_SELECTED, CLEAR_SELECTED_MENU } from './bocas';
+import { MENU_SELECTED, CLEAR_SELECTED_MENU } from './products';
 
 export const MENU_CREATED = createAction('MENU_CREATED');
 export const MENU_GET_ALL = createAction('MENU_GET_ALL');
@@ -60,7 +60,7 @@ export function createMenu (blob) {
 export function updateMenu (blob) {
   return async (dispatch, getState) => {
     try {
-      const { reducers : { menus : { edit, menus } } } = getState();
+      const { reducers : { menus : { edit } } } = getState();
       const form = new FormData();
       const { description, name, _id, picture } = edit;
       form.append('description', description);

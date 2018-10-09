@@ -77,10 +77,10 @@ class Menus extends Component {
                 </div>
                 <Card.Content>
                   <Card.Header>
-                   Crear Menu
+                   Crear categoria
                   </Card.Header>
                   <Card.Meta>
-                    Añadir un menu nuevo
+                    Ejemplo: desayunos, almuerzos...
                   </Card.Meta>
                 </Card.Content>
                 <Card.Content extra>

@@ -3,9 +3,9 @@ import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { decrement, decrementAsync, increment, incrementAsync } from '../../reducers/counter';
-import { handleStoreChange, getRestaurant } from '../../reducers/restaurants';
+import { handleStore, getStore } from '../../reducers/store';
 import { Dropdown } from 'semantic-ui-react';
-import { Button, Card, Grid, Icon } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 
 function mapStateToProps (state) {
   return state;
@@ -18,8 +18,8 @@ function mapDispatchToProps (dispatch) {
       incrementAsync,
       decrement,
       decrementAsync,
-      handleStoreChange,
-      getRestaurant,
+      handleStore,
+      getStore,
       changePage: () => push('/menus')
     }, dispatch),
   };
@@ -27,11 +27,11 @@ function mapDispatchToProps (dispatch) {
 
 class Home extends Component {
   componentDidMount () {
-    this.props.actions.getRestaurant();
+    this.props.actions.getStore();
   }
 
   dropDownChange = (e, { value }) => {
-    this.props.actions.handleStoreChange(value);
+    this.props.actions.handleStore(value);
   };
 
   render () {
@@ -47,16 +47,17 @@ class Home extends Component {
         text : 'Cerrado',
       }
     ];
-    const { reducers: { restaurants : { restaurant } } } = this.props;
+    const { reducers: { store : { store } } } = this.props;
     return (
       <div>
-        <Grid columns={1} doubling className='grid-scroll'>
+        <Grid columns={3} doubling className='grid-scroll'>
           <Grid.Row className='inner-scroll'>
             <Grid.Column>
-              <h1>Tienda {restaurant.name}</h1>
-            </Grid.Column>
-            <Grid.Column>
-              <h2>Estado del comercio</h2>
+              <img src={store.banner} />
+              <img src={store.logo} />
+              <h1>{store.name}</h1>
+              <p>{store.description}</p>
+              <h1>Estado de la tienda</h1>
               <Dropdown { ...{
                 onChange    : this.dropDownChange,
                 options,
@@ -64,7 +65,7 @@ class Home extends Component {
                 fluid       : true,
                 search      : true,
                 selection   : true,
-                value       : restaurant.isOpen,
+                value       : store.isOpen,
               } }  />
             </Grid.Column>
           </Grid.Row>

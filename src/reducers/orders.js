@@ -22,7 +22,6 @@ export const initialState = I.from({
 export function getAllOrders () {
   return async (dispatch, getState) => {
     try {
-      // const { reducers : { menus : { create, menus } } } = getState();
       const { data } = await axios.get('orders/all');
       dispatch(ORDERS_GET_ALL(data));
     } catch (e) {
@@ -35,6 +34,8 @@ export function changeOrderStatus (_id, status) {
   return async (dispatch, getState) => {
     try {
       // const { reducers : { menus : { create, menus } } } = getState();
+
+      // aca hay que agregar el gateway
       const { data } = await axios.post('orders/status', { orderId : _id, status });
       dispatch(ORDERS_GET_ALL(data));
     } catch (e) {
