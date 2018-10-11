@@ -18,6 +18,7 @@ import TopBar from './components/TopBar';
 import ConnectedRoute from './components/ConnectedRoute';
 import ConnectedSwitch from './components/ConnectedSwitch';
 import { checkAuth } from './helpers/auth';
+import { authNotifier } from './reducers/auth';
 
 // Reducers
 
@@ -29,12 +30,19 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions : bindActionCreators({
+      authNotifier,
       changePage : (page) => push(page)
     }, dispatch),
   };
 }
 
 class App extends Component {
+  componentDidMount () {
+    if (checkAuth()) {
+      this.props.actions.authNotifier();
+    }
+  }
+
   DefaultContainer = () => {
     const { reducers : { auth : { currentUser } } } = this.props;
     return (

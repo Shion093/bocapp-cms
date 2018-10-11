@@ -6,22 +6,25 @@ import axios from '../helpers/axios';
 // Reducers
 import { CLEAR_MENU_STATE } from './menus';
 import { CLEAR_BOCA_STATE } from './bocas';
+import Notifier from '../helpers/notifier';
 
 export const LOGGED_IN = createAction('LOGGED_IN');
 export const LOGGED_OUT = createAction('LOGGED_OUT');
 export const HANDLE_LOGIN_INPUT = createAction('HANDLE_LOGIN_INPUT');
 export const SET_USER = createAction('SET_USER');
+export const SET_NOTIFIER_CREDS = createAction('SET_NOTIFIER_CREDS');
 
 const localUser = localStorage.getItem('user');
 
-const user = localUser ? JSON.parse(localUser) : { };
+const user = localUser ? JSON.parse(localUser) : {};
 
 export const initialState = I.from({
-  userInfo    : {
+  userInfo      : {
     email    : '',
     password : '',
   },
-  currentUser : user,
+  currentUser   : user,
+  notifierCreds : {},
 });
 
 export function handleLogin() {
@@ -43,7 +46,22 @@ export function handleLogin() {
   }
 }
 
-export function clearUser () {
+export function authNotifier() {
+  return async (dispatch, getState) => {
+    try {
+      const { data } = await axios.post('auth/notifier');
+      const notifier = Notifier({...data, topic : 'prueba' });
+      notifier.connect();
+      dispatch(SET_NOTIFIER_CREDS(data));
+      console.log(data);
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export function clearUser() {
   return (dispatch) => {
     localStorage.setItem('token', '');
     localStorage.setItem('refreshToken', '');
@@ -55,7 +73,7 @@ export function clearUser () {
   }
 }
 
-export function handleLogout () {
+export function handleLogout() {
   return (dispatch) => {
     dispatch(clearUser());
     dispatch(CLEAR_MENU_STATE());
@@ -74,7 +92,7 @@ export default handleActions({
   LOGGED_IN          : (state) => {
     return I.merge(state, { userInfo : initialState.userInfo });
   },
-  LOGGED_OUT          : (state) => {
+  LOGGED_OUT         : (state) => {
     return I.merge(state, { user : {} });
   },
   HANDLE_LOGIN_INPUT : (state, action) => {
@@ -83,5 +101,8 @@ export default handleActions({
   },
   SET_USER           : (state, action) => {
     return I.merge(state, { currentUser : action.payload });
+  },
+  SET_NOTIFIER_CREDS : (state, action) => {
+    return I.merge(state, { notifierCreds : action.payload });
   },
 }, initialState)
